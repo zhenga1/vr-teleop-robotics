@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light">
+  <title>Remote Teleoperation Data Collection | UR7e × Meta Quest 3</title>
+  <meta name="description" content="VR-based teleoperation for UR7e to collect real-world manipulation demonstrations, record trajectories, replay motion, and condition behavior using vision." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #0b0f14;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.09);
+      --stroke: rgba(255,255,255,0.12);
+      --text: rgba(255,255,255,0.88);
+      --muted: rgba(255,255,255,0.65);
+      --muted2: rgba(255,255,255,0.50);
+      --brand: #6ae4ff;
+      --brand2: #a78bfa;
+      --ok: #34d399;
+      --warn: #fbbf24;
+      --bad: #fb7185;
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --shadow: 0 18px 60px rgba(0,0,0,0.55);
+      --r: 18px;
+      --r2: 24px;
+      --max: 1120px;
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1000px 600px at 18% 10%, rgba(106,228,255,0.16), transparent 55%),
+        radial-gradient(900px 600px at 80% 20%, rgba(167,139,250,0.14), transparent 60%),
+        radial-gradient(1100px 700px at 50% 110%, rgba(52,211,153,0.08), transparent 55%),
+        linear-gradient(180deg, #05070b 0%, #0b0f14 60%, #070a0f 100%);
+      overflow-x:hidden;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; text-decoration-color: rgba(255,255,255,0.35); }
+    .wrap{ width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+
+    /* Top nav */
+    .nav{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(16px);
+      background: rgba(11,15,20,0.55);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 0;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      font-weight: 700; letter-spacing: -0.02em;
+    }
+    .mark{
+      width: 34px; height: 34px; border-radius: 12px;
+      background:
+        radial-gradient(14px 14px at 30% 30%, rgba(106,228,255,0.9), transparent 60%),
+        radial-gradient(18px 18px at 70% 60%, rgba(167,139,250,0.85), transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+    }
+    .nav-links{ display:flex; gap: 16px; align-items:center; }
+    .nav-links a{
+      font-size: 14px;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+    }
+    .nav-links a:hover{
+      color: var(--text);
+      border-color: rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      text-decoration: none;
+    }
+    .cta{
+      display:flex; gap:10px; align-items:center;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      box-shadow: 0 10px 34px rgba(0,0,0,0.25);
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .btn:hover{ background: rgba(255,255,255,0.07); }
+    .btn.primary{
+      border-color: rgba(106,228,255,0.30);
+      background: linear-gradient(135deg, rgba(106,228,255,0.18), rgba(167,139,250,0.12));
+    }
+    .btn.primary:hover{
+      background: linear-gradient(135deg, rgba(106,228,255,0.22), rgba(167,139,250,0.15));
+    }
+    .btn .dot{
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--brand);
+      box-shadow: 0 0 0 6px rgba(106,228,255,0.12);
+    }
+
+    /* Hero */
+    header.hero{
+      padding: 58px 0 26px;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+    @media (max-width: 920px){
+      .hero-grid{ grid-template-columns: 1fr; }
+    }
+    .card{
+      border-radius: var(--r2);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hero-card{
+      padding: 28px 26px;
+      position: relative;
+      min-height: 340px;
+    }
+    .hero-card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 260px at 18% 22%, rgba(106,228,255,0.16), transparent 60%),
+        radial-gradient(540px 260px at 70% 35%, rgba(167,139,250,0.13), transparent 60%);
+      z-index: 0;
+      pointer-events:none;
+    }
+    .hero-card > *{ position: relative; z-index: 1; }
+    .kicker{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-bottom: 12px;
+    }
+    .pill{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,0.80);
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+    }
+    .pill.ok{ border-color: rgba(52,211,153,0.28); background: rgba(52,211,153,0.08); }
+    .pill.b{ border-color: rgba(106,228,255,0.25); background: rgba(106,228,255,0.07); }
+    .pill.p{ border-color: rgba(167,139,250,0.25); background: rgba(167,139,250,0.07); }
+
+    h1{
+      margin: 10px 0 10px;
+      font-size: clamp(30px, 4.2vw, 46px);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+    .sub{
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 62ch;
+      margin: 0 0 18px;
+    }
+    .hero-actions{
+      display:flex; gap: 12px; flex-wrap:wrap;
+      margin-top: 14px;
+    }
+    .meta{
+      margin-top: 18px;
+      display:flex; flex-wrap:wrap;
+      gap: 10px 16px;
+      color: var(--muted2);
+      font-size: 13px;
+    }
+    .meta b{ color: rgba(255,255,255,0.82); font-weight: 600; }
+
+    /* Right rail */
+    .side{
+      padding: 18px;
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 340px;
+    }
+    .stat{
+      border-radius: var(--r);
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      padding: 14px;
+    }
+    .stat .label{ font-size: 12px; color: var(--muted2); font-family: var(--mono); }
+    .stat .value{ margin-top: 6px; font-size: 15px; color: var(--text); font-weight: 600; }
+    .stat .hint{ margin-top: 6px; font-size: 13px; color: var(--muted); line-height: 1.45; }
+
+    /* Sections */
+    section{ padding: 26px 0; }
+    .section-title{
+      display:flex; align-items: baseline; justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    h2{
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+    .section-title p{
+      margin: 0;
+      color: var(--muted2);
+      font-size: 13px;
+      font-family: var(--mono);
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 980px){
+      .grid-3{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      border-radius: var(--r2);
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      padding: 18px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.30);
+    }
+    .panel h3{
+      margin: 0 0 8px;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+    .panel p{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    /* Pipeline / diagram-ish */
+    .pipeline{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .flow{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+    @media (max-width: 980px){
+      .flow{ grid-template-columns: 1fr; }
+    }
+    .node{
+      border-radius: var(--r2);
+      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      padding: 16px;
+      position: relative;
+      overflow:hidden;
+    }
+    .node::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(300px 120px at 30% 20%, rgba(106,228,255,0.10), transparent 60%);
+      pointer-events:none;
+    }
+    .node:nth-child(2)::before{ background: radial-gradient(300px 120px at 30% 20%, rgba(167,139,250,0.10), transparent 60%); }
+    .node:nth-child(3)::before{ background: radial-gradient(300px 120px at 30% 20%, rgba(52,211,153,0.08), transparent 60%); }
+    .node:nth-child(4)::before{ background: radial-gradient(300px 120px at 30% 20%, rgba(251,191,36,0.08), transparent 60%); }
+    .node > *{ position:relative; z-index:1; }
+    .node .tag{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+      opacity: 0.95;
+    }
+    .node .title{
+      margin-top: 8px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .node ul{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    /* Demo gallery */
+    .demo-grid{
+      display:grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    @media (max-width: 980px){
+      .demo-grid{ grid-template-columns: 1fr; }
+    }
+    .demo-stage{
+      border-radius: var(--r2);
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      padding: 14px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.28);
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .media{
+      border-radius: 18px;
+      border: 1px dashed rgba(255,255,255,0.18);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      min-height: 320px;
+      display:grid;
+      place-items: center;
+      text-align:center;
+      padding: 18px;
+      position: relative;
+      overflow:hidden;
+    }
+    .media::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(420px 220px at 25% 35%, rgba(106,228,255,0.10), transparent 60%),
+        radial-gradient(420px 220px at 78% 60%, rgba(167,139,250,0.08), transparent 60%);
+      pointer-events:none;
+    }
+    .media .ph{
+      position:relative; z-index:1;
+      max-width: 56ch;
+    }
+    .media .ph .t{
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .media .ph .d{
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .demo-list{
+      border-radius: var(--r2);
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.03);
+      padding: 14px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.28);
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .demo-item{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.02);
+      padding: 12px;
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+    .demo-item:hover{
+      transform: translateY(-1px);
+      border-color: rgba(106,228,255,0.18);
+      background: rgba(255,255,255,0.04);
+    }
+    .demo-item .k{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted2);
+      margin-bottom: 6px;
+    }
+    .demo-item .n{
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+    .demo-item .s{
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    /* Footer */
+    footer{
+      padding: 26px 0 40px;
+      color: var(--muted2);
+      font-size: 13px;
+    }
+    .foot{
+      display:flex; justify-content: space-between; gap: 12px; flex-wrap:wrap;
+      border-top: 1px solid rgba(255,255,255,0.10);
+      padding-top: 16px;
+    }
+
+    /* Modal */
+    .modal{
+      position: fixed; inset: 0;
+      display:none;
+      place-items: center;
+      background: rgba(0,0,0,0.65);
+      z-index: 100;
+      padding: 22px;
+    }
+    .modal.open{ display:grid; }
+    .modal-card{
+      width: min(920px, 100%);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(14,18,24,0.92);
+      box-shadow: 0 30px 120px rgba(0,0,0,0.70);
+      overflow:hidden;
+    }
+    .modal-top{
+      padding: 14px 16px;
+      display:flex; justify-content: space-between; align-items:center;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+    .modal-top .title{
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .modal-body{ padding: 16px; }
+    .modal-body .frame{
+      min-height: 420px;
+      border-radius: 16px;
+      border: 1px dashed rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.03);
+      display:grid;
+      place-items:center;
+      padding: 18px;
+      text-align:center;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .x{
+      appearance:none;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 12px;
+      cursor:pointer;
+    }
+    .x:hover{ background: rgba(255,255,255,0.07); }
+  </style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <div class="nav">
+    <div class="wrap nav-inner">
+      <div class="brand" aria-label="Project brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <div style="font-size:14px; opacity:.95;">Remote Teleoperation</div>
+          <div style="font-size:12px; color: var(--muted2); margin-top:2px;">UR7e × Meta Quest 3 • Data Collection</div>
+        </div>
+      </div>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#overview">Overview</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#demos">Demos</a>
+        <a href="#results">Challenges</a>
+        <a href="#future">Future</a>
+      </nav>
+
+      <div class="cta">
+        <a class="btn" href="#demos" title="Jump to demos">
+          <span class="dot" aria-hidden="true"></span> View demos
+        </a>
+        <a class="btn primary" href="#contact" title="Contact / repo links">
+          <span style="font-family:var(--mono); font-size:12px;">↗</span> Get code
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div class="card hero-card">
+        <div class="kicker">
+          <span class="pill b">VR teleop</span>
+          <span class="pill p">trajectory logs</span>
+          <span class="pill ok">replay on hardware</span>
+          <span class="pill">vision-conditioned</span>
+        </div>
+
+        <h1>Intuitive VR Teleoperation for High-Fidelity Robot Demonstrations</h1>
+        <p class="sub">
+          We collect real-world manipulation trajectories on a UR7e using Meta Quest 3 controllers,
+          store demonstrations in readable logs, and replay motion with conditional execution based on perception.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn primary" data-scroll="#demos">▶ Watch demo</button>
+          <button class="btn" data-scroll="#pipeline">Explore pipeline</button>
+          <button class="btn" data-scroll="#overview">Read overview</button>
+        </div>
+
+        <div class="meta">
+          <div><b>Platform:</b> UR7e</div>
+          <div><b>Interface:</b> Meta Quest 3 (SteamVR/ALVR)</div>
+          <div><b>Stack:</b> ROS 2 + MoveIt</div>
+          <div><b>Outputs:</b> .txt logs (+ dataset placeholders)</div>
+        </div>
+      </div>
+
+      <aside class="card side">
+        <div class="stat">
+          <div class="label">Project goal</div>
+          <div class="value">Reliable data collection for robot learning</div>
+          <div class="hint">Demonstrations are recorded during teleoperation and replayed for training and evaluation.</div>
+        </div>
+        <div class="stat">
+          <div class="label">Recording rate</div>
+          <div class="value">2 Hz sampling (0.5 s)</div>
+          <div class="hint">Aligned recording and replay for smoother execution (placeholder values—update if changed).</div>
+        </div>
+        <div class="stat">
+          <div class="label">Conditional execution</div>
+          <div class="value">Color-based selection → job queue → replay</div>
+          <div class="hint">Vision module selects which trajectory to execute based on sensed scene state.</div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <div class="wrap">
+      <div class="section-title">
+        <h2>Overview</h2>
+        <p>what & why</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="panel">
+          <h3>Why data collection matters</h3>
+          <p>
+            Modern robot learning methods are data-hungry—policy quality depends strongly on the diversity and fidelity
+            of real-world demonstrations.
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Our contribution</h3>
+          <p>
+            An intuitive VR teleoperation workflow using Meta Quest 3 controllers to collect UR7e manipulation trajectories,
+            stored as readable logs for replay and dataset building.
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Key capabilities</h3>
+          <p>
+            (1) VR-based 6-DoF control, (2) high-fidelity recording & storage, (3) trajectory replay on hardware,
+            (4) vision-conditioned selection/sorting.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PIPELINE -->
+  <section id="pipeline">
+    <div class="wrap">
+      <div class="section-title">
+        <h2>System Pipeline</h2>
+        <p>inputs → processing → outputs</p>
+      </div>
+
+      <div class="pipeline">
+        <div class="flow">
+          <div class="node">
+            <div class="tag">Planning / Control</div>
+            <div class="title">VR Teleoperation</div>
+            <ul>
+              <li>Meta Quest 3 headset + controllers</li>
+              <li>Coordinate mapping + pose transforms</li>
+              <li>Inverse kinematics for UR7e end-effector targets</li>
+            </ul>
+          </div>
+          <div class="node">
+            <div class="tag">Data Collection</div>
+            <div class="title">Record & Store</div>
+            <ul>
+              <li>Start/stop recording via ROS 2 services</li>
+              <li>Sample joint state + gripper state</li>
+              <li>Write readable <span style="font-family:var(--mono)">.txt</span> logs (dataset placeholders)</li>
+            </ul>
+          </div>
+          <div class="node">
+            <div class="tag">Actuation</div>
+            <div class="title">Trajectory Replay</div>
+            <ul>
+              <li>Load recorded logs</li>
+              <li>Timing alignment for smooth replay</li>
+              <li>Execute on physical UR7e</li>
+            </ul>
+          </div>
+          <div class="node">
+            <div class="tag">Sensing</div>
+            <div class="title">Vision-Based Selection</div>
+            <ul>
+              <li>Detect scene state (e.g., color labels)</li>
+              <li>Populate job queue</li>
+              <li>Replay selected trajectory conditionally</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Recorder lifecycle (editable)</h3>
+          <p>
+            <span style="font-family:var(--mono)">1)</span> launch recorder node →
+            <span style="font-family:var(--mono)">2)</span> call <span style="font-family:var(--mono)">/start_recording</span> →
+            <span style="font-family:var(--mono)">3)</span> teleoperate (timer sampling) →
+            <span style="font-family:var(--mono)">4)</span> call <span style="font-family:var(--mono)">/stop_recording</span> to save joint + gripper states.
+            <br><br>
+            <span style="color:var(--muted2)">Swap this block with your exact ROS commands + topic/service names when final.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMOS -->
+  <section id="demos">
+    <div class="wrap">
+      <div class="section-title">
+        <h2>Demos</h2>
+        <p>placeholders (drop-in videos/gifs)</p>
+      </div>
+
+      <div class="demo-grid">
+        <div class="demo-stage">
+          <div class="media" id="stage">
+            <div class="ph">
+              <div class="t">Demo Stage Placeholder</div>
+              <div class="d">
+                Replace this with an embedded video, GIF, or interactive WebM.
+                <br><br>
+                Suggested: one “hero” demo showing VR control → recording → replay → vision-conditioned selection.
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin:0;">
+            <h3>What to show (recommended)</h3>
+            <p>
+              A tight 45–75s cut: (1) VR teleop hand motion, (2) robot motion synced, (3) recording start/stop,
+              (4) replay executing, (5) perception chooses between two stored trajectories.
+            </p>
+          </div>
+        </div>
+
+        <div class="demo-list" aria-label="Demo list">
+          <div class="demo-item" data-demo="vr">
+            <div class="k">DEMO 01 • VR control</div>
+            <div class="n">Meta Quest 3 → UR7e end-effector control</div>
+            <div class="s">Placeholder for a short clip showing mapping + IK + smooth teleop.</div>
+          </div>
+
+          <div class="demo-item" data-demo="record">
+            <div class="k">DEMO 02 • Recording</div>
+            <div class="n">Start/stop service call → trajectory log</div>
+            <div class="s">Placeholder: terminal + RViz + robot motion + saved .txt snippet.</div>
+          </div>
+
+          <div class="demo-item" data-demo="replay">
+            <div class="k">DEMO 03 • Replay</div>
+            <div class="n">Load .txt → execute on hardware</div>
+            <div class="s">Placeholder: side-by-side recorded vs replayed motion.</div>
+          </div>
+
+          <div class="demo-item" data-demo="vision">
+            <div class="k">DEMO 04 • Vision-conditioned selection</div>
+            <div class="n">Detected color → job queue → selected trajectory</div>
+            <div class="s">Placeholder: camera overlay + “blue/green/none” + execution.</div>
+          </div>
+
+          <div class="demo-item" data-demo="full">
+            <div class="k">DEMO 05 • End-to-end</div>
+            <div class="n">Teleop → record → sense → choose → replay</div>
+            <div class="s">Placeholder: “final showcase” video montage (best for recruiters).</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHALLENGES / RESULTS -->
+  <section id="results">
+    <div class="wrap">
+      <div class="section-title">
+        <h2>Challenges & Engineering Notes</h2>
+        <p>what broke, what we fixed</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="panel">
+          <h3>Hardware / networking</h3>
+          <p>
+            Getting the Quest headset + controllers reliably connected on the same local network as the lab computer.
+            <br><br><span style="color:var(--muted2)">Placeholder: add your final network topology + troubleshooting steps.</span>
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Software / timing alignment</h3>
+          <p>
+            Smooth trajectory replay requires consistent timing between recorded samples and playback speed.
+            <br><br><span style="color:var(--muted2)">Placeholder: add your exact interpolation / rate-control strategy.</span>
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Reliability / safety</h3>
+          <p>
+            Bounding box constraints, speed limiting, and per-joint control can reduce noise and improve safety.
+            <br><br><span style="color:var(--muted2)">Placeholder: add safety checks you implemented in ROS nodes.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUTURE -->
+  <section id="future">
+    <div class="wrap">
+      <div class="section-title">
+        <h2>Future Considerations</h2>
+        <p>next iterations</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="panel">
+          <h3>Controls</h3>
+          <p>
+            PID per joint, velocity limiting, and filtering to reduce noise and improve stability during teleop and replay.
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Safety bounding</h3>
+          <p>
+            Add robot workspace bounding and proximity checks to prevent unsafe motions near lab fixtures and people.
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Dataset packaging</h3>
+          <p>
+            Export trajectories to a consistent schema (e.g., timestamps + joints + gripper + camera metadata) and release a small benchmark set.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM / CONTACT -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="section-title">
+        <h2>Team & Links</h2>
+        <p>placeholders</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="panel">
+          <h3>Team</h3>
+          <p>
+            B.S.: Aaron Zheng, Akshaj Gupta, Kourosh Salahi, Ziteng (Ender) Ji<br>
+            M.S.: Samuel Mankoff
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Repository</h3>
+          <p>
+            <span style="color:var(--muted2)">Placeholder:</span> add GitHub link<br>
+            <span style="font-family:var(--mono); font-size:12px;">https://github.com/your-org/your-repo</span>
+          </p>
+        </div>
+        <div class="panel">
+          <h3>Demo assets</h3>
+          <p>
+            <span style="color:var(--muted2)">Placeholder:</span> add Google Drive / YouTube / local files<br>
+            Suggested: <span style="font-family:var(--mono)">/assets/demo_01.webm</span>, <span style="font-family:var(--mono)">/assets/teaser.gif</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap foot">
+      <div>© <span id="year"></span> Remote Teleoperation Data Collection • ME206A Project Group 18</div>
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <a href="#overview">Overview</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#demos">Demos</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Demo modal">
+    <div class="modal-card">
+      <div class="modal-top">
+        <div class="title" id="modalTitle">Demo</div>
+        <button class="x" id="closeModal" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="frame" id="modalFrame">
+          <div>
+            <div style="font-weight:700; color: rgba(255,255,255,0.86); margin-bottom:8px;">Placeholder</div>
+            Drop your embedded video here (YouTube iframe / local WebM / GIF).<br>
+            You can also show a ROS graph, RViz screenshot, or a short “terminal + robot” montage.
+          </div>
+        </div>
+        <div style="margin-top:10px; color:var(--muted2); font-size:12px; font-family:var(--mono);">
+          Tip: Keep each clip ≤ 20 seconds; add one end-to-end cut as the hero demo.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Smooth scroll helpers
+    document.querySelectorAll("[data-scroll]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const sel = btn.getAttribute("data-scroll");
+        const el = document.querySelector(sel);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    // Demo modal behavior
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalFrame = document.getElementById("modalFrame");
+    const closeModal = document.getElementById("closeModal");
+
+    const demoMeta = {
+      vr: {
+        title: "DEMO 01 • VR Control",
+        hint: "Replace with a video showing controller motion, IK targets, and UR7e following smoothly."
+      },
+      record: {
+        title: "DEMO 02 • Recording",
+        hint: "Replace with: service call start/stop + a quick peek at saved .txt trajectory."
+      },
+      replay: {
+        title: "DEMO 03 • Replay",
+        hint: "Replace with a replay clip; consider side-by-side with the original teleop."
+      },
+      vision: {
+        title: "DEMO 04 • Vision-conditioned Selection",
+        hint: "Replace with camera overlay + detected label → job queue → chosen trajectory."
+      },
+      full: {
+        title: "DEMO 05 • End-to-end",
+        hint: "Replace with your best final showcase montage for a recruiter-friendly overview."
+      }
+    };
+
+    document.querySelectorAll(".demo-item").forEach(item => {
+      item.addEventListener("click", () => {
+        const key = item.getAttribute("data-demo");
+        const meta = demoMeta[key] || { title: "Demo", hint: "Placeholder" };
+        modalTitle.textContent = meta.title;
+        modalFrame.innerHTML = `
+          <div>
+            <div style="font-weight:700; color: rgba(255,255,255,0.86); margin-bottom:8px;">${meta.title}</div>
+            <div style="max-width:62ch;">
+              ${meta.hint}<br><br>
+              <span style="opacity:.9;">Drop-in options:</span>
+              <ul style="text-align:left; margin:10px auto 0; width:min(560px, 100%); color: rgba(255,255,255,0.72); line-height:1.6;">
+                <li>Local WebM: &lt;video src="assets/demo_${key}.webm" controls&gt;&lt;/video&gt;</li>
+                <li>YouTube: iframe embed</li>
+                <li>GIF: &lt;img src="assets/demo_${key}.gif"&gt;</li>
+              </ul>
+            </div>
+          </div>
+        `;
+        modal.classList.add("open");
+      });
+    });
+
+    function close() { modal.classList.remove("open"); }
+    closeModal.addEventListener("click", close);
+    modal.addEventListener("click", (e) => { if (e.target === modal) close(); });
+    window.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+
+    // Footer year
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
