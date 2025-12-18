@@ -700,15 +700,17 @@
         <!-- LEFT: Full pipeline demo -->
         <div class="demo-stage">
           <div class="media hero-video">
-            <video
-              id="demo-video"
-              controls
-              muted
-              preload="metadata"
-            >
-              <source src="assets/full.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
+            <div class="video-container">
+              <iframe
+                src="https://drive.google.com/file/d/1eMcpyJhRtLM1I6wXNmuv1Oq4-d7S8RSg/preview"
+                width="420"
+                height="236"
+                allow="autoplay"
+                style="border-radius:12px; border:none;">
+              </iframe>
+            </div>
+            
+
             <div class="caption">
               End-to-end VR teleoperation → recording → vision → replay on UR7e
             </div>
@@ -718,36 +720,28 @@
         <!-- RIGHT: Teleop + Replay -->
         <div class="side-videos">
           <div class="media small-video">
-            <video
-              id="demo-video"
-              controls
-              muted
-              preload="metadata"
-            >
-              <source src="assets/teleop.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
+            <div class="video-container">
+              <iframe
+                src="https://drive.google.com/file/d/1cHVPyW85sx2RR0owW8st4kCQn0yvuLPx/preview"
+                width="420"
+                height="236"
+                allow="autoplay"
+                style="border-radius:12px; border:none;">
+              </iframe>
+            </div>
             <div class="caption">VR Teleoperation</div>
           </div>
 
           <div class="media small-video">
-            <video
-              id="demo-video"
-              controls
-              muted
-              preload="metadata"
-            >
-              <source src="assets/replay.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-            <!--<video
-              src="assets/replay.mov"
-              autoplay
-              muted
-              loop
-              playsinline
-              controls
-            ></video>-->
+            <div class="video-container">
+              <iframe
+                src="https://drive.google.com/file/d/1cHVPyW85sx2RR0owW8st4kCQn0yvuLPx/preview"
+                width="420"
+                height="236"
+                allow="autoplay"
+                style="border-radius:12px; border:none;">
+              </iframe>
+            </div>
             <div class="caption">Trajectory Replay</div>
           </div>
         </div>
