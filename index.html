@@ -36,17 +36,16 @@
 
     *{ box-sizing: border-box; }
     html, body{ height: 100%; }
-    body{
-      margin:0;
-      font-family: var(--sans);
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(1000px 600px at 18% 10%, rgba(106,228,255,0.16), transparent 55%),
-        radial-gradient(900px 600px at 80% 20%, rgba(167,139,250,0.14), transparent 60%),
-        radial-gradient(1100px 700px at 50% 110%, rgba(52,211,153,0.08), transparent 55%),
-        linear-gradient(180deg, #05070b 0%, #0b0f14 60%, #070a0f 100%);
-      overflow-x:hidden;
+        radial-gradient(1200px 600px at 20% -10%, rgba(167,139,250,0.15), transparent),
+        radial-gradient(800px 500px at 80% 10%, rgba(34,211,238,0.12), transparent),
+        var(--bg);
     }
+
 
     a{ color: inherit; text-decoration: none; }
     a:hover{ text-decoration: underline; text-decoration-color: rgba(255,255,255,0.35); }
@@ -134,13 +133,18 @@
     @media (max-width: 920px){
       .hero-grid{ grid-template-columns: 1fr; }
     }
-    .card{
-      border-radius: var(--r2);
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.10);
-      box-shadow: var(--shadow);
-      overflow:hidden;
+    .card {
+      background: linear-gradient(
+        180deg,
+        rgba(255,255,255,0.04),
+        rgba(255,255,255,0.01)
+      );
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     }
+
     .hero-card{
       padding: 28px 26px;
       position: relative;
@@ -474,6 +478,31 @@
       cursor:pointer;
     }
     .x:hover{ background: rgba(255,255,255,0.07); }
+    .vr-icon-img {
+      width: 34px;
+      height: 34px;
+      padding: 6px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .hidden {
+      display: none;
+    }
+
+    #video-container {
+      margin-top: 16px;
+    }
+
+    #demo-video {
+      width: 420px;      /* 👈 small */
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+
   </style>
 </head>
 
@@ -482,7 +511,10 @@
   <div class="nav">
     <div class="wrap nav-inner">
       <div class="brand" aria-label="Project brand">
-        <div class="mark" aria-hidden="true"></div>
+        <img src="assets/Quest-3-front-sensor-suite.png" class="vr-icon-img" alt="VR controller">
+        <!--<img src="assets/quest3_right.png" class="vr-icon-img" alt="VR controller">-->
+        <!-- <div class="mark" aria-hidden="true"></div> --->
+
         <div>
           <div style="font-size:14px; opacity:.95;">Remote Teleoperation</div>
           <div style="font-size:12px; color: var(--muted2); margin-top:2px;">UR7e × Meta Quest 3 • Data Collection</div>
@@ -665,56 +697,58 @@
       </div>
 
       <div class="demo-grid">
+        <!-- LEFT: Full pipeline demo -->
         <div class="demo-stage">
-          <div class="media" id="stage">
-            <div class="ph">
-              <div class="t">Demo Stage Placeholder</div>
-              <div class="d">
-                Replace this with an embedded video, GIF, or interactive WebM.
-                <br><br>
-                Suggested: one “hero” demo showing VR control → recording → replay → vision-conditioned selection.
-              </div>
+          <div class="media hero-video">
+            <video
+              id="demo-video"
+              controls
+              muted
+              preload="metadata"
+            >
+              <source src="assets/full.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <div class="caption">
+              End-to-end VR teleoperation → recording → vision → replay on UR7e
             </div>
-          </div>
-
-          <div class="panel" style="margin:0;">
-            <h3>What to show (recommended)</h3>
-            <p>
-              A tight 45–75s cut: (1) VR teleop hand motion, (2) robot motion synced, (3) recording start/stop,
-              (4) replay executing, (5) perception chooses between two stored trajectories.
-            </p>
           </div>
         </div>
 
-        <div class="demo-list" aria-label="Demo list">
-          <div class="demo-item" data-demo="vr">
-            <div class="k">DEMO 01 • VR control</div>
-            <div class="n">Meta Quest 3 → UR7e end-effector control</div>
-            <div class="s">Placeholder for a short clip showing mapping + IK + smooth teleop.</div>
+        <!-- RIGHT: Teleop + Replay -->
+        <div class="side-videos">
+          <div class="media small-video">
+            <video
+              id="demo-video"
+              controls
+              muted
+              preload="metadata"
+            >
+              <source src="assets/teleop.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <div class="caption">VR Teleoperation</div>
           </div>
 
-          <div class="demo-item" data-demo="record">
-            <div class="k">DEMO 02 • Recording</div>
-            <div class="n">Start/stop service call → trajectory log</div>
-            <div class="s">Placeholder: terminal + RViz + robot motion + saved .txt snippet.</div>
-          </div>
-
-          <div class="demo-item" data-demo="replay">
-            <div class="k">DEMO 03 • Replay</div>
-            <div class="n">Load .txt → execute on hardware</div>
-            <div class="s">Placeholder: side-by-side recorded vs replayed motion.</div>
-          </div>
-
-          <div class="demo-item" data-demo="vision">
-            <div class="k">DEMO 04 • Vision-conditioned selection</div>
-            <div class="n">Detected color → job queue → selected trajectory</div>
-            <div class="s">Placeholder: camera overlay + “blue/green/none” + execution.</div>
-          </div>
-
-          <div class="demo-item" data-demo="full">
-            <div class="k">DEMO 05 • End-to-end</div>
-            <div class="n">Teleop → record → sense → choose → replay</div>
-            <div class="s">Placeholder: “final showcase” video montage (best for recruiters).</div>
+          <div class="media small-video">
+            <video
+              id="demo-video"
+              controls
+              muted
+              preload="metadata"
+            >
+              <source src="assets/replay.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <!--<video
+              src="assets/replay.mov"
+              autoplay
+              muted
+              loop
+              playsinline
+              controls
+            ></video>-->
+            <div class="caption">Trajectory Replay</div>
           </div>
         </div>
       </div>
