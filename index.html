@@ -301,7 +301,7 @@
     }
     .node{
       border-radius: var(--r2);
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid rgba(0,0,0,0.8);
       background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
       padding: 16px;
       position: relative;
@@ -698,7 +698,11 @@
             <span style="font-family:var(--mono)">3)</span> teleoperate (timer sampling) →
             <span style="font-family:var(--mono)">4)</span> call <span style="font-family:var(--mono)">/stop_recording</span> to save joint + gripper states.
             <br><br>
-            <span style="color:var(--muted2)">Swap this block with your exact ROS commands + topic/service names when final.</span>
+            <span style="color:var(--muted2)">ros2 run planning teleo_recorder: Run teleo recorder</span>
+            <br>
+            <span style="color:var(--muted2)">ros2 run planning quest_teleop: Run teleop pipeline with Quest3</span>
+            <br>
+            <span style="color:var(--muted2)">ros2 run planning full_execute: Run replay with Quest3</span>
           </p>
         </div>
       </div>
@@ -710,7 +714,7 @@
     <div class="wrap">
       <div class="section-title">
         <h2>Demos</h2>
-        <p>placeholders (drop-in videos/gifs)</p>
+        <!-- <p>placeholders (drop-in videos/gifs)</p> -->
       </div>
 
       <div class="demo-grid">
@@ -779,21 +783,21 @@
           <h3>Hardware / networking</h3>
           <p>
             Getting the Quest headset + controllers reliably connected on the same local network as the lab computer.
-            <br><br><span style="color:var(--muted2)">Placeholder: add your final network topology + troubleshooting steps.</span>
+            <!-- <br><br><span style="color:var(--muted2)">Placeholder: add your final network topology + troubleshooting steps.</span> -->
           </p>
         </div>
         <div class="panel">
           <h3>Software / timing alignment</h3>
           <p>
             Smooth trajectory replay requires consistent timing between recorded samples and playback speed.
-            <br><br><span style="color:var(--muted2)">Placeholder: add your exact interpolation / rate-control strategy.</span>
+            <!-- <br><br><span style="color:var(--muted2)">Placeholder: add your exact interpolation / rate-control strategy.</span> -->
           </p>
         </div>
         <div class="panel">
           <h3>Reliability / safety</h3>
           <p>
             Bounding box constraints, speed limiting, and per-joint control can reduce noise and improve safety.
-            <br><br><span style="color:var(--muted2)">Placeholder: add safety checks you implemented in ROS nodes.</span>
+            <!-- <br><br><span style="color:var(--muted2)">Placeholder: add safety checks you implemented in ROS nodes.</span> -->
           </p>
         </div>
       </div>
