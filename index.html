@@ -592,7 +592,7 @@
       <aside class="card side">
         <div class="stat">
           <div class="label">Project goal</div>
-          <div class="value">Reliable data collection for robot learning</div>
+          <div class="value">Reliable remote data collection for robot learning</div>
           <div class="hint">Demonstrations are recorded during teleoperation and replayed for training and evaluation.</div>
         </div>
         <div class="stat">
@@ -610,7 +610,7 @@
   </header>
 
   <!-- OVERVIEW -->
-  <section id="overview">
+  <!-- <section id="overview">
     <div class="wrap">
       <div class="section-title">
         <h2>Overview</h2>
@@ -639,6 +639,56 @@
             (4) vision-conditioned selection/sorting.
           </p>
         </div>
+      </div>
+    </div>
+  </section> -->
+  <section id="overview">
+    <div class="wrap">
+      <div class="section-title">
+        <h2>1. Introduction</h2>
+        <p>Goal, Motivation & Applications</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+
+        <div class="panel">
+          <h3 style="color: var(--brand);">(a) Project Goal</h3>
+          <p>
+            The goal of this project was to create a low-cost, high-fidelity teleoperation interface/pipeline. We utilize off-the-shelf consumer Virtual Reality hardware (Meta Quest 3) to control a 7-DoF UR7e robotic arm. The system allows a human operator to perform manipulation tasks naturally in 3D space, recording synchronized joint and gripper data to train modern Imitation Learning policies.
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3 style="color: var(--accent);">(b) Motivation & Technical Challenges</h3>
+          <p>
+            Modern robot learning (e.g., Diffusion Policies, Open X-Embodiment) is bottlenecked by the lack of high-quality demonstration data. Traditional collection methods such as kinesthetic teaching or "puppet" arms are either dangerous, unintuitive, expensive, or produce noisy and inconsistent results for complex tasks.
+          </p>
+          <p style="margin-top: 14px;">
+            <strong>The Core Problem:</strong> This project bridges two distinct coordinate systems: the unconstrained Euclidean space of a VR controller and the kinematic constraints of an industrial robot. The key technical challenge was developing a <strong>"Logical Home Pairing" algorithm</strong> (Absolute Pose Mapping) to translate user hand poses into safe and accurate robot trajectories in real-time without risking singularities or sudden jumps.
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3 style="color: var(--ok);">(c) Real-World Applications</h3>
+          <p>
+            Beyond collecting training data for AI, this teleoperation architecture has immediate utility in several high-impact domains:
+          </p>
+          <ul style="margin: 12px 0 0; padding-left: 20px; color: var(--muted); font-size: 14px; line-height: 1.6;">
+            <li style="margin-bottom: 6px;">
+              <strong>Data Collection:</strong> Enabling scalable data generation for Open X-Embodiment initiatives.
+            </li>
+            <li style="margin-bottom: 6px;">
+              <strong>Hazardous Environments:</strong> Allowing humans to handle toxic materials or nuclear waste from a safe distance using natural hand motions.
+            </li>
+            <li style="margin-bottom: 6px;">
+              <strong>Remote Maintenance:</strong> Enabling technicians to repair machinery in cleanrooms or offshore rigs via VR digital twins.
+            </li>
+            <li>
+              <strong>Space Robotics:</strong> Facilitating control of orbital manipulators where traditional joystick interfaces are too abstract for complex dexterity tasks.
+            </li>
+          </ul>
+        </div>
+
       </div>
     </div>
   </section>
