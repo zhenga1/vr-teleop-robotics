@@ -693,8 +693,8 @@
     </div>
   </section>
 
-  <!-- PIPELINE -->
-  <section id="pipeline">
+  <!-- PIPELINE  Maybe cahnge name to system-->
+  <!-- <section id="pipeline">
     <div class="wrap">
       <div class="section-title">
         <h2>System Pipeline</h2>
@@ -757,6 +757,229 @@
           </p>
         </div>
       </div>
+    </div>
+  </section> -->
+  
+  <section id="pipeline">
+    <div class="wrap">
+      
+      <div class="section-title" style="margin-bottom: 40px;">
+        <h2>2. Design Strategy</h2>
+        <p>Criteria, Choices & Trade-offs</p>
+      </div>
+
+      <div class="grid-3" style="margin-bottom: 60px;">
+        <div class="panel">
+          <h3 style="color: var(--brand);">(a) Design Criteria</h3>
+          <p>
+            To act as a viable data collection platform, the system had to meet three critical performance benchmarks:
+          </p>
+          <ul style="margin: 10px 0 0; padding-left: 20px; font-size: 13px; color: var(--muted); line-height: 1.6;">
+            <li><strong>Latency:</strong> End-to-end delay must be <100ms to prevent user motion sickness and over-correction.</li>
+            <li><strong>Safety:</strong> The system must prevent "jumps" when the VR controller is first activated.</li>
+            <li><strong>Fidelity:</strong> Recorded trajectories must preserve high-frequency movements and gripper actions for successful replay.</li>
+          </ul>
+        </div>
+
+        <div class="panel" style="grid-column: span 2;">
+          <h3 style="color: var(--accent);">(b/c) Design Choices & Trade-offs</h3>
+          <p>
+            We prioritized spatial intuition and operator ergonomics to ensure high-quality data collection. With this in mind we implemented an <strong>Absolute Pose Mapping</strong> strategy rather than Relative Velocity Control. 
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 12px;">
+            <div>
+              <strong style="color: var(--text); font-size: 14px;">Why we chose it:</strong>
+              <p style="font-size: 13px; margin-top: 4px;">
+                Absolute mapping "locks" the robot's end-effector to the user's hand, enabling intuitive spatial understanding. Velocity control often suffers from drift which often makes precise stacking tasks frustrating for the user.
+              </p>
+            </div>
+            <div>
+              <strong style="color: var(--text); font-size: 14px;">The Trade-off:</strong>
+              <p style="font-size: 13px; margin-top: 4px;">
+                <strong>Workspace vs. Precision:</strong> By mapping 1:1, the user is physically limited by their own arm reach. We sacrificed the ability to move infinitely by resetting the controller and its pose in exchange for higher precision and safety in a fixed workspace.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="grid-column: span 3;">
+          <h3 style="color: var(--ok);">(d) Engineering Impact</h3>
+          <p>
+            Our architecture moves beyond academic theory to solve the "Data Bottleneck" in industrial robotics. We prioritized portability and fault-tolerance to create a deployable solution.
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 12px;">
+            <div>
+              <strong style="color: var(--text); font-size: 14px;">1. Scalable Data Pipeline (Quest 3):</strong>
+              <p style="font-size: 13px; margin-top: 4px;">
+                We replaced capital-intensive motion capture labs (e.g., OptiTrack) with consumer inside-out tracking. This drastically reduces the "cost per datum" and allows for decentralized data collection without specialized facility infrastructure.
+              </p>
+            </div>
+            <div>
+              <strong style="color: var(--text); font-size: 14px;">2. Solving the "Long Tail" (Human-in-the-Loop):</strong>
+              <p style="font-size: 13px; margin-top: 4px;">
+                Hard-coded automation fails on edge cases. Our teleoperation stack ensures reliability by providing a remote human fallback interface, allowing operators to resolve failures in hazardous or unstructured environments without stopping the line.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="section-title">
+  <h2>3. Implementation</h2>
+  <p>Hardware, Software & Architecture</p>
+</div>
+
+<div style="margin-bottom: 30px;">
+  <h3 style="font-size: 18px; margin-bottom: 12px;">(a/b) Hardware Setup</h3>
+  <p style="color: var(--muted); max-width: 65ch; margin-bottom: 20px;">
+    The system operates on a distributed ROS 2 network. The <strong>Meta Quest 3</strong> streams tracking data wirelessly via <strong>ALVR</strong> over a 5GHz Wi-Fi connection. The <strong>Linux Workstation</strong> runs the OpenVR runtime (SteamVR) to bridge this data into the ROS ecosystem.
+  </p>
+  <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+    <span class="pill p">Meta Quest 3</span>
+    <span class="pill">ALVR (Wireless)</span>
+    <span class="pill">SteamVR / OpenVR</span>
+    <span class="pill">Linux Workstation</span>
+    <span class="pill b">UR7e Manipulator</span>
+    <span class="pill">Robotiq 2F-85</span>
+  </div>
+</div>
+
+<div style="margin-bottom: 40px;">
+  <h3 style="font-size: 18px; margin-bottom: 16px;">(c) Software Architecture</h3>
+  <p style="color: var(--muted); margin-bottom: 20px;">
+    The pipeline relies on <strong>ALVR</strong> to spoof the Quest 3 as a standard OpenVR HMD on the Linux host. The <strong>Teleop Node</strong> queries the SteamVR runtime for controller poses and retargets them to the robot frame ($T_{base}$).
+  </p>
+
+  <div class="pipeline">
+    <div class="flow">
+      <div class="node">
+        <div class="tag">Input</div>
+        <div class="title">VR Teleop Node</div>
+        <ul>
+          <li><strong>Bridge:</strong> ALVR Server &harr; Client</li>
+          <li><strong>Source:</strong> SteamVR/OpenVR Poses</li>
+        </ul>
+      </div>
+      
+      <div class="node">
+        <div class="tag">Process</div>
+        <div class="title">Recorder Node</div>
+        <ul>
+          <li>Syncs Joint States + Gripper</li>
+          <li><strong>Service:</strong> <code>/start_recording</code></li>
+        </ul>
+      </div>
+
+      <div class="node">
+        <div class="tag">Output</div>
+        <div class="title">Serialization</div>
+        <ul>
+          <li><strong>.npz:</strong> Compressed (Training)</li>
+          <li><strong>.txt:</strong> Human-Readable (Debug)</li>
+          <li><strong>Service:</strong> <code>/stop_recording</code></li>
+        </ul>
+      </div>
+
+      <div class="node">
+        <div class="tag">Actuation</div>
+        <div class="title">Replay Node</div>
+        <ul>
+          <li>Parses .npz logs</li>
+          <li>Interpolates Trajectory</li>
+          <li>Publishes to UR Controller</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <h3 style="color: var(--text);">(d) System Operation Workflow</h3>
+  <ol style="margin: 10px 0 0; padding-left: 20px; color: var(--muted); line-height: 1.7;">
+    <li>
+      <strong>Initialization:</strong> Launch SteamVR and the ALVR Server on the workstation. Open the ALVR Client on the Quest 3 and establish the wireless handshake.
+    </li>
+    <li>
+      <strong>Calibration:</strong> Position the robot in "Home" state. Hold the VR controller in a comfortable neutral pose and trigger the <strong>Grip</strong> button to calculate the local $T_{offset}$ matrix.
+    </li>
+    <li>
+      <strong>Data Collection:</strong> Press <strong>Button A</strong> to trigger the <code>/start_recording</code> service. Perform the manipulation task (e.g., stacking).
+    </li>
+    <li>
+      <strong>Serialization:</strong> Press <strong>Button B</strong> to trigger <code>/stop_recording</code>, which flushes the RAM buffer to a timestamped <code>.npz</code> file on disk.
+    </li>
+  </ol>
+</div>
+
+
+
+<div class="wrap">
+      <div class="section-title">
+        <h2>System Pipeline</h2>
+        <p>inputs → processing → outputs</p>
+      </div>
+
+      <div class="pipeline">
+        <div class="flow">
+          <div class="node">
+            <div class="tag">Planning / Control</div>
+            <div class="title">VR Teleoperation</div>
+            <ul>
+              <li>Meta Quest 3 headset + controllers</li>
+              <li>Coordinate mapping + pose transforms</li>
+              <li>Inverse kinematics for UR7e end-effector targets</li>
+            </ul>
+          </div>
+          <div class="node">
+            <div class="tag">Data Collection</div>
+            <div class="title">Record & Store</div>
+            <ul>
+              <li>Start/stop recording via ROS 2 services</li>
+              <li>Sample joint state + gripper state</li>
+              <li>Write readable <span style="font-family:var(--mono)">.txt</span> logs (dataset placeholders)</li>
+            </ul>
+          </div>
+          <div class="node">
+            <div class="tag">Actuation</div>
+            <div class="title">Trajectory Replay</div>
+            <ul>
+              <li>Load recorded logs</li>
+              <li>Timing alignment for smooth replay</li>
+              <li>Execute on physical UR7e</li>
+            </ul>
+          </div>
+          <div class="node">
+            <div class="tag">Sensing</div>
+            <div class="title">Vision-Based Selection</div>
+            <ul>
+              <li>Detect scene state (e.g., color labels)</li>
+              <li>Populate job queue</li>
+              <li>Replay selected trajectory conditionally</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Recorder lifecycle (editable)</h3>
+          <p>
+            <span style="font-family:var(--mono)">1)</span> launch recorder node →
+            <span style="font-family:var(--mono)">2)</span> call <span style="font-family:var(--mono)">/start_recording</span> →
+            <span style="font-family:var(--mono)">3)</span> teleoperate (timer sampling) →
+            <span style="font-family:var(--mono)">4)</span> call <span style="font-family:var(--mono)">/stop_recording</span> to save joint + gripper states.
+            <br><br>
+            <span style="color:var(--muted2)">ros2 run planning teleo_recorder: Run teleo recorder</span>
+            <br>
+            <span style="color:var(--muted2)">ros2 run planning quest_teleop: Run teleop pipeline with Quest3</span>
+            <br>
+            <span style="color:var(--muted2)">ros2 run planning full_execute: Run replay with Quest3</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+      
+
     </div>
   </section>
 
