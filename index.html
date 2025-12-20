@@ -912,7 +912,9 @@
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
         <div>
           <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">
-            TODO
+            We provide users with the ability to record arbitrary teleoperation trajectories through a custom ROS 2 recording pipeline. Trajectory recording is initiated by launching the teleo_recorder ROS 2 node that we implemented, followed by invoking the service call
+ros2 service call /start_recording std_srvs/srv/Trigger "{}".
+Once triggered, the recording service begins capturing robot command messages published by the teleoperation stack (i.e., the command topic used to drive the robot during live control). These messages reflect the real-time motion generated during teleoperation and are logged continuously for the duration of the recording session. The resulting trajectories can then be replayed or processed downstream, enabling repeatable execution and offline analysis of teleoperated demonstrations.
           </p>
         </div>
 
