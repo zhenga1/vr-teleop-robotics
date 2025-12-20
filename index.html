@@ -1260,74 +1260,96 @@ if cv2.inRange(hsv, blue_lo, blue_hi).any():
   </section>
 
 
-         <section id="team">
-  <h2>Team</h2>
-
-  <div class="team-member">
-    <h3>Akshaj Gupta</h3>
-    <p>
-      Akshaj is a sophomore majoring in Electrical Engineering and Computer Sciences (EECS).
-      He is interested in working with robotic arms to perform tasks, as well as applications
-      of robotics in music.
-    </p>
-    <p>
-      <strong>Contributions:</strong>
-      Assisted with Computer Vision Pipeline and trajectory saving
-    </p>
+<section id="team" style="margin-top: 80px; margin-bottom: 60px;">
+  
+  <div class="section-title" style="border-top: 1px solid #eee; padding-top: 40px; margin-bottom: 30px;">
+    <h2>4. Project Team</h2>
+    <p>Roles & Contributions</p>
   </div>
 
-  <div class="team-member">
-    <h3>Ziteng (Ender) Ji</h3>
-    <p>
-      Ziteng is a senior majoring in Computer Science. His research interests lie in robotics
-      and robot learning, with a focus on enabling robots to acquire sophisticated skills
-      through learning.
-    </p>
-    <p>
-      <strong>Contributions:</strong>
-      Contributed to Meta Quest connection with UR7e and setup of teleoperation.
-    </p>
-  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
 
-  <div class="team-member">
-    <h3>Samuel Mankoff</h3>
-    <p>
-      Samuel is a Master’s student in Mechanical Engineering. He is interested in robotic
-      control, perception, and learning, particularly in designing robots that can replicate
-      and optimize human manipulation and locomotion skills.
-    </p>
-    <p>
-      <strong>Contributions:</strong>
-      Assisted with robot control logic, teleoperation, and trajectory mapping
-    </p>
-  </div>
+    <div class="panel" style="display: flex; flex-direction: column;">
+      <h3 style="color: var(--brand); margin-bottom: 5px;">Samuel Mankoff</h3>
+      <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #999; margin-bottom: 15px;">Master’s Student, Mechanical Engineering</span>
+      
+      <p style="font-size: 14px; color: var(--muted); flex-grow: 1;">
+        Interested in robotic control, perception, and learning. Focused on designing robots that can replicate human manipulation skills.
+      </p>
+      
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #f0f0f0;">
+        <strong style="font-size: 13px; color: #333;">Contribution:</strong>
+        <p style="font-size: 13px; color: var(--muted); margin-top: 4px;">
+          Led development of the VR-based teleoperation pipeline (Quest 3). Assisted with robot control logic and trajectory mapping.
+        </p>
+      </div>
+    </div>
 
-  <div class="team-member">
-    <h3>Kourosh Salahi</h3>
-    <p>
-      Kourosh Salahi is a junior studying Electrical Engineering and Computer Sciences (EECS)
-      and Business Administration. He is interested in machine learning applications for
-      robotics, with a particular focus on humanoid robots.
-    </p>
-    <p>
-      <strong>Contributions:</strong>
-      Contributed to the computer vision sensing pipeline for color-based object detection, and teleoperation for data collection.
-    </p>
-  </div>
+    <div class="panel" style="display: flex; flex-direction: column;">
+      <h3 style="color: var(--brand); margin-bottom: 5px;">Ziteng (Ender) Ji</h3>
+      <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #999; margin-bottom: 15px;">Senior, Computer Science</span>
+      
+      <p style="font-size: 14px; color: var(--muted); flex-grow: 1;">
+        Research interests lie in robot learning, specifically enabling robots to acquire sophisticated skills through data-driven approaches.
+      </p>
+      
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #f0f0f0;">
+        <strong style="font-size: 13px; color: #333;">Contribution:</strong>
+        <p style="font-size: 13px; color: var(--muted); margin-top: 4px;">
+          Architected the Meta Quest connection with UR7e and assisted in the physical setup of the teleoperation workspace.
+        </p>
+      </div>
+    </div>
 
-  <div class="team-member">
-    <h3>Aaron Zheng</h3>
-    <p>
-      Aaron Zheng is a senior EECS major interested in humanoid robots, as well as training
-      and tuning large language models. He is particularly interested in using learning-based
-      policies to train humanoids to execute motions in simulation.
-    </p>
-    <p>
-      <strong>Contributions:</strong>
-      Led development of the VR-based teleoperation pipeline using the Meta Quest headset.
-    </p>
-  </div>
+    <div class="panel" style="display: flex; flex-direction: column;">
+      <h3 style="color: var(--brand); margin-bottom: 5px;">Akshaj Gupta</h3>
+      <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #999; margin-bottom: 15px;">Sophomore, EECS</span>
+      
+      <p style="font-size: 14px; color: var(--muted); flex-grow: 1;">
+        Interested in working with robotic manipulators and exploring the intersection of robotics and music applications.
+      </p>
+      
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #f0f0f0;">
+        <strong style="font-size: 13px; color: #333;">Contribution:</strong>
+        <p style="font-size: 13px; color: var(--muted); margin-top: 4px;">
+          Developed the Computer Vision Pipeline (HSV/Depth) and implemented the trajectory saving/replay logic.
+        </p>
+      </div>
+    </div>
 
+    <div class="panel" style="display: flex; flex-direction: column;">
+      <h3 style="color: var(--brand); margin-bottom: 5px;">Kourosh Salahi</h3>
+      <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #999; margin-bottom: 15px;">Junior, EECS & Business</span>
+      
+      <p style="font-size: 14px; color: var(--muted); flex-grow: 1;">
+        Focused on machine learning applications for robotics, specifically control strategies for humanoid platforms.
+      </p>
+      
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #f0f0f0;">
+        <strong style="font-size: 13px; color: #333;">Contribution:</strong>
+        <p style="font-size: 13px; color: var(--muted); margin-top: 4px;">
+          Contributed to the CV sensing pipeline for object detection and performed data collection trials via teleoperation.
+        </p>
+      </div>
+    </div>
+
+    <div class="panel" style="display: flex; flex-direction: column;">
+      <h3 style="color: var(--brand); margin-bottom: 5px;">Aaron Zheng</h3>
+      <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #999; margin-bottom: 15px;">Senior, EECS</span>
+      
+      <p style="font-size: 14px; color: var(--muted); flex-grow: 1;">
+        Interested in humanoid robots and LLMs. Focusing on learning-based policies for motion execution in simulation.
+      </p>
+      
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #f0f0f0;">
+        <strong style="font-size: 13px; color: #333;">Contribution:</strong>
+        <p style="font-size: 13px; color: var(--muted); margin-top: 4px;">
+          Assisted with the Meta Quest to UR7e network bridge and teleoperation testing.
+        </p>
+      </div>
+    </div>
+
+  </div>
 </section>
   
   <!-- TEAM / CONTACT -->
