@@ -859,58 +859,12 @@
     <span class="pill b">UR7e Manipulator</span>
     <span style="color: var(--muted); font-size: 18px;">→</span>
     
-    <span class="pill">Robotiq 2F-85 (End Effector)</span>
-
-  </div>
-</div>
-
-<div style="margin-bottom: 40px;">
-  <h3 style="font-size: 18px; margin-bottom: 16px;">Software Architecture</h3>
-
-  <div class="pipeline">
-    <div class="flow">
-      <div class="node">
-        <div class="tag">Input</div>
-        <div class="title">VR Teleop Node</div>
-        <ul>
-          <li><strong>Bridge:</strong> ALVR Server &harr; Client</li>
-          <li><strong>Source:</strong> SteamVR/OpenVR Poses</li>
-        </ul>
-      </div>
-      
-      <div class="node">
-        <div class="tag">Process</div>
-        <div class="title">Recorder Node</div>
-        <ul>
-          <li>Syncs Joint States + Gripper</li>
-          <li><strong>Service:</strong> <code>/start_recording</code></li>
-        </ul>
-      </div>
-
-      <div class="node">
-        <div class="tag">Output</div>
-        <div class="title">Serialization</div>
-        <ul>
-          <li><strong>.npz:</strong> Compressed (Training)</li>
-          <li><strong>.txt:</strong> Human-Readable (Debug)</li>
-          <li><strong>Service:</strong> <code>/stop_recording</code></li>
-        </ul>
-      </div>
-
-      <div class="node">
-        <div class="tag">Actuation</div>
-        <div class="title">Replay Node</div>
-        <ul>
-          <li>Parses .npz logs</li>
-          <li>Interpolates Trajectory</li>
-          <li>Publishes to UR Controller</li>
-        </ul>
-      </div>
-    </div>
   </div>
 </div>
 
   <div style="margin-top: 60px;">
+
+    <h3 style="font-size: 18px; margin-bottom: 16px;">Software Architecture</h3>
 
   <div class="panel" style="margin-bottom: 30px;">
     <h3 style="color: var(--brand); border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
