@@ -909,7 +909,7 @@
       
       <div>
         <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">
-          To support Imitation Learning, mere position logging is insufficient. We implement a <strong>RAM-buffered recorder</strong> that captures the full kinematic state vector at 30Hz. Data is serialized into compressed NumPy archives (<code>.npz</code>) to preserve floating-point precision for model training.
+          We provide the option for the user to replay any trajectory they recorded by passing in the path to the .txt file to a ROS2 node that populates a job queue with the joint positions recorded at each 0.5 second sample and executes trajectories to reach each of those joint positionsone by one in a smooth fasion to replay the entire trajectory.
         </p>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
            <span class="pill" style="font-size: 11px; background: #eee; color: #555;">t (timestamp)</span>
@@ -917,8 +917,7 @@
            <span class="pill" style="font-size: 11px; background: #eee; color: #555;">gripper (bool)</span>
         </div>
       </div>
-
-
+      
   <div class="panel" style="margin-bottom: 60px;"> <h3 style="color: var(--ok); border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
       Continuous Trajectory Replay With Color Sensing
     </h3>
@@ -926,7 +925,7 @@
       
       <div>
         <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">
-          For autonomous playback, we utilize a <strong>Depth-Gated HSV Filter</strong>. This filters out background noise by ensuring candidate objects lie within the table's specific Z-plane (0.75m – 1.1m). Once a valid target is confirmed, the system triggers a Cubic Spline interpolation of the recorded trajectory.
+          Another option is for the user to run the trajectory replay continuously with color sensing. First, a ROS node must be run that loads the Intel Realsense D435i camera. For color detection, we filter colors using the HSV color spectrum, an adjustable distance (in our demo we used 0.75 meters to 1.1 meters), and adjustable area parameters to control the range of the size of objects that can be detected. The camera continously captures frames of an environment and once a color is detected, runs a full exection involving loading a trajectory .txt file that corresponds with the color of the object detected, populating a job queue with the joint positions recorded at each 0.5 second sample, and executing trajectories to reach each of those joint positionsone by one in a smooth fasion to replay the entire trajectory. Once the trajectory as been replayed, the node returns to detecting colors and can replay another trajectory if another color is found.  
         </p>
         <ul style="font-size: 13px; color: var(--muted); padding-left: 20px; margin: 0;">
           <li><strong>Blue:</strong> HSV[95-130] + Depth[0.75m]</li>
@@ -935,6 +934,20 @@
       </div>
 
   </div>
+
+<div style="margin-bottom: 30px;">
+  <figure style="margin: 0; padding: 0; text-align: center;">
+    <img 
+      src="assets/vision_image.jpeg" 
+      alt="Full Pipeline" 
+      style="width: 100%; max-width: 850px; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);"
+    >
+    <figcaption style="font-size: 13px; color: var(--muted); margin-top: 10px; text-align: center;">
+      The complete pipeline showing real-time teleoperation (top) and the vision-based trajectory replay loop using Color Detection (bottom).
+    </figcaption>
+  </figure>
+
+</div>
 
 </div> <div class="panel" style="margin-top: 40px; margin-bottom: 80px;">
   <h3 style="color: var(--text); border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
