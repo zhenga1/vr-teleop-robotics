@@ -917,6 +917,14 @@ ros2 service call /start_recording std_srvs/srv/Trigger "{}".
 Once triggered, the recording service begins capturing robot command messages published by the teleoperation stack (i.e., the command topic used to drive the robot during live control). These messages reflect the real-time motion generated during teleoperation and are logged continuously for the duration of the recording session. The resulting trajectories can then be replayed or processed downstream, enabling repeatable execution and offline analysis of teleoperated demonstrations.
           </p>
         </div>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 3px solid var(--brand);">
+          <!-- <strong style="font-size: 12px; color: #333; display: block; margin-bottom: 10px;">Control Law:</strong> -->
+          
+          <img src="./assets/vr_record_diagram.png" 
+              alt="Equation showing T_target calculation based on calibration offset and live VR pose"
+              style="max-width: 100%; height: auto; display: block;">
+              
+        </div>
 
       </div>
     </div>
