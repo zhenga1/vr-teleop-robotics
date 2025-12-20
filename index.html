@@ -818,41 +818,31 @@
         </div>
       </div>
 
-
       <div class="section-title">
+
+
+
+
+
+        
   <h2>Implementation</h2>
-  <p>Hardware, Software & Architecture</p>
+  <p>Full Pipeline</p>
 </div>
 
-  <div style="margin-bottom: 30px;">
+<div style="margin-bottom: 30px;">
   <h3 style="font-size: 18px; margin-bottom: 12px;">Hardware Signal Flow</h3>
-  <p style="color: var(--muted); max-width: 65ch; margin-bottom: 20px;">
-    The system operates on a distributed ROS 2 network. The system employs SteamVR and ALVR for wireless VR tracking and data streaming, which is streamed to our ROS system that uses inverse kinematics to drive the robot.
-  </p>
+  <figure style="margin: 0; padding: 0;">
+    <img 
+      src="assets/pipeline_image.png" 
+      alt="Full Pipeline" 
+      style="width: 100%; max-width: 850px; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);"
+    >
+    <figcaption style="font-size: 13px; color: var(--muted); margin-top: 10px; text-align: center;">
+      [cite_start]Figure 1: The complete pipeline showing real-time teleoperation (top) and the vision-based trajectory replay loop using Color Detection (bottom)[cite: 58, 59].
+    </figcaption>
+  </figure>
 
-
-<div style="display: flex; gap: 20px; margin-bottom: 25px; flex-wrap: wrap;">
-    
-    <figure style="margin: 0; flex: 1; min-width: 200px;">
-      <img src="./assets/Quest3 Gear.png" 
-           alt="Meta Quest 3 Headset and Controllers" 
-           style="width: 100%; max-width: 300px; height: auto; border-radius: 8px; border: 1px solid #e0e0e0;">
-      <figcaption style="color: var(--muted); font-size: 13px; margin-top: 8px;">
-        <strong>Fig 3a:</strong> The teleoperation input device (Meta Quest 3).
-      </figcaption>
-    </figure>
-
-    <figure style="margin: 0; flex: 1; min-width: 200px;">
-      <img src="./assets/UR7e.png" 
-           alt="Universal Robots UR7e with Robotiq Gripper" 
-           style="width: 100%; max-width: 300px; height: auto; border-radius: 8px; border: 1px solid #e0e0e0;">
-      <figcaption style="color: var(--muted); font-size: 13px; margin-top: 8px;">
-        <strong>Fig 3b:</strong> The actuation hardware (UR7e).
-      </figcaption>
-    </figure>
-
-  </div>
-
+</div>
     
   <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
     <span class="pill p">Meta Quest 3</span>
@@ -1098,6 +1088,10 @@ if cv2.inRange(hsv, blue_lo, blue_hi).any():
 </div>
   </section>
 
+
+
+
+  
   <!-- DEMOS -->
   <section id="demos">
     <div class="wrap">
