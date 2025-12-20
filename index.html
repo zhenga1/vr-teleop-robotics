@@ -925,7 +925,7 @@
       
       <div>
         <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">
-          Another option is for the user to run the trajectory replay continuously with color sensing. First, a ROS node must be run that loads the Intel Realsense D435i camera. For color detection, we filter colors using the HSV color spectrum, an adjustable distance (in our demo we used 0.75 meters to 1.1 meters), and adjustable area parameters to control the range of the size of objects that can be detected. The camera continously captures frames of an environment and once a color is detected, runs a full exection involving loading a trajectory .txt file that corresponds with the color of the object detected, populating a job queue with the joint positions recorded at each 0.5 second sample, and executing trajectories to reach each of those joint positionsone by one in a smooth fasion to replay the entire trajectory. Once the trajectory as been replayed, the node returns to detecting colors and can replay another trajectory if another color is found.  
+          Another option is for the user to run the trajectory replay continuously with color sensing. First, a ROS node must be run that loads the Intel Realsense D435i camera and publishes the detected color of objects to a ROS2 topic. For color detection, we filter colors using the HSV color spectrum, an adjustable distance (in our demo we used 0.75 meters to 1.1 meters), and adjustable area parameters to control the range of the size of objects that can be detected. Then a second ROS2 node must be run that pulls the information published by the camera, and once a color is detected, runs a full exection involving loading a trajectory .txt file that corresponds with the color of the object detected, populating a job queue with the joint positions recorded at each 0.5 second sample, and executing trajectories to reach each of those joint positionsone by one in a smooth fasion to replay the entire trajectory. Once the trajectory as been replayed, the node returns to detecting colors and can replay another trajectory if another color is found.  
         </p>
         <ul style="font-size: 13px; color: var(--muted); padding-left: 20px; margin: 0;">
           <li><strong>Blue:</strong> HSV[95-130] + Depth[0.75m]</li>
@@ -943,7 +943,7 @@
       style="width: 100%; max-width: 850px; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);"
     >
     <figcaption style="font-size: 13px; color: var(--muted); margin-top: 10px; text-align: center;">
-      The complete pipeline showing real-time teleoperation (top) and the vision-based trajectory replay loop using Color Detection (bottom).
+      The complete vision pipeline involves running a camera_detection ROS2 node that detects the color of a target object and publishes the color to the detected_color topic. A second ROS2 node full_execute must also be run that subscribes to the detected_color topic and based on the color detected populates a job queue to replay a recorded trajectory before listening back to the topic for the next detected color.
     </figcaption>
   </figure>
 
