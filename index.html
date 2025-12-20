@@ -1102,7 +1102,7 @@ if cv2.inRange(hsv, blue_lo, blue_hi).any():
   <section id="demos">
     <div class="wrap">
       <div class="section-title">
-        <h2>Demos</h2>
+        <h2>Results & Demos</h2>
         <!-- <p>placeholders (drop-in videos/gifs)</p> -->
       </div>
 
@@ -1122,7 +1122,7 @@ if cv2.inRange(hsv, blue_lo, blue_hi).any():
             
 
             <div class="caption">
-              End-to-end VR teleoperation → recording → vision → replay on UR7e
+              End-to-end VR teleoperation pipeline that includes recording, vision, and replay on the UR7E. We perform the task of sorting blocks based on their color.
             </div>
           </div>
         </div>
@@ -1139,7 +1139,7 @@ if cv2.inRange(hsv, blue_lo, blue_hi).any():
                 style="border-radius:12px; border:none;">
               </iframe>
             </div>
-            <div class="caption">VR Teleoperation</div>
+            <div class="caption">VR Teleoperation Demonstration</div>
           </div>
 
           <div class="media small-video">
@@ -1152,12 +1152,76 @@ if cv2.inRange(hsv, blue_lo, blue_hi).any():
                 style="border-radius:12px; border:none;">
               </iframe>
             </div>
-            <div class="caption">Trajectory Replay</div>
+            <div class="caption">Trajectory Replay Demonstration With Sorting</div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+    <section id="pipeline">
+    <div class="wrap">
+      
+      <div class="section-title" style="margin-bottom: 40px;">
+        <h2>Design Strategy</h2>
+        <p>Criteria, Choices & Trade-offs</p>
+      </div>
+
+      <div class="grid-3" style="margin-bottom: 60px;">
+        <div class="panel">
+          <h3 style="color: var(--brand);">Design Criteria</h3>
+          <p>
+            To act as a viable data collection platform, the system had to meet three critical performance benchmarks:
+          </p>
+          <ul style="margin: 10px 0 0; padding-left: 20px; font-size: 13px; color: var(--muted); line-height: 1.6;">
+            <li><strong>Latency:</strong> End-to-end delay must be <100ms to prevent user motion sickness and over-correction.</li>
+            <li><strong>Safety:</strong> The system must prevent "jumps" when the VR controller is first activated.</li>
+            <li><strong>Fidelity:</strong> Recorded trajectories must preserve high-frequency movements and gripper actions for successful replay.</li>
+          </ul>
+        </div>
+
+        <div class="panel" style="grid-column: span 2;">
+          <h3 style="color: var(--accent);">Design Choices & Trade-offs</h3>
+          <p>
+            We prioritized spatial intuition and operator ergonomics to ensure high-quality data collection. With this in mind we implemented an <strong>Absolute Pose Mapping</strong> strategy rather than Relative Velocity Control. 
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 12px;">
+            <div>
+              <strong style="color: var(--text); font-size: 14px;">Why we chose it:</strong>
+              <p style="font-size: 13px; margin-top: 4px;">
+                Absolute mapping "locks" the robot's end-effector to the user's hand, enabling intuitive spatial understanding. Velocity control often suffers from drift which often makes precise stacking tasks frustrating for the user.
+              </p>
+            </div>
+            <div>
+              <strong style="color: var(--text); font-size: 14px;">The Trade-off:</strong>
+              <p style="font-size: 13px; margin-top: 4px;">
+                <strong>Workspace vs. Precision:</strong> By mapping 1:1, the user is physically limited by their own arm reach. We sacrificed the ability to move infinitely by resetting the controller and its pose in exchange for higher precision and safety in a fixed workspace.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="grid-column: span 3;">
+          <h3 style="color: var(--ok);">Engineering Impact</h3>
+          <p>
+            Our architecture moves beyond academic theory to solve the "Data Bottleneck" in industrial robotics. We prioritized portability and fault-tolerance to create a deployable solution.
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 12px;">
+            <div>
+              <strong style="color: var(--text); font-size: 14px;">Scalable Data Pipeline (Quest 3):</strong>
+              <p style="font-size: 13px; margin-top: 4px;">
+                We replaced capital-intensive motion capture labs (e.g., OptiTrack) with consumer inside-out tracking. This drastically reduces the "cost per datum" and allows for decentralized data collection without specialized facility infrastructure.
+              </p>
+            </div>
+            <div>
+              <strong style="color: var(--text); font-size: 14px;">Solving the "Long Tail" (Human-in-the-Loop):</strong>
+              <p style="font-size: 13px; margin-top: 4px;">
+                Hard-coded automation fails on edge cases. Our teleoperation stack ensures reliability by providing a remote human fallback interface, allowing operators to resolve failures in hazardous or unstructured environments without stopping the line.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
   <!-- CHALLENGES / RESULTS -->
   <section id="results">
