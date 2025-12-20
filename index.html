@@ -930,6 +930,92 @@
   </div>
 </div>
 
+
+            </div>
+  </div>
+</div> <div class="panel"> ```
+
+### 2. The Code to Paste
+I have wrapped the new sections in your `panel` class style so they match the rest of your design perfectly.
+
+```html
+<div style="margin-bottom: 50px;">
+  
+  <div class="section-title" style="margin: 60px 0 30px 0; border-top: 1px solid #eee; padding-top: 40px;">
+    <h2>Detailed Algorithm Design</h2>
+    <p>Core Logic & Math Models</p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 60px;">
+    <div>
+      <h3 style="color: var(--brand); font-size: 18px; margin-bottom: 10px;">(i) Dynamic Calibration Logic</h3>
+      <p style="color: var(--muted); font-size: 14px;">
+        To align the VR coordinate system with the Robot base, we implemented a <strong>Dynamic Calibration</strong> strategy in the <code>VRTeleopIK</code> node. Instead of static offsets, we capture the transform of both agents when the operator presses the "Grip" button.
+      </p>
+      <div class="panel" style="margin-top: 20px; border-left: 4px solid #2196F3; background: #f8f9fa;">
+        <strong>The Math Model:</strong><br>
+        <div style="font-family: 'Times New Roman', serif; font-size: 16px; margin-top: 8px;">
+          T<sub>offset</sub> = T<sub>robot_home</sub> &cdot; (T<sub>controller_home</sub>)<sup>-1</sup>
+        </div>
+        <div style="font-family: 'Times New Roman', serif; font-size: 16px; margin-top: 8px;">
+          T<sub>target</sub>(t) = T<sub>offset</sub> &cdot; T<sub>controller</sub>(t)
+        </div>
+      </div>
+    </div>
+    <div style="background: #1e1e1e; border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; font-size: 11px; overflow-x: auto;">
+      <div style="color: #9cdcfe; margin-bottom: 8px;"># From vr_teleop_ik.py</div>
+      <pre style="margin: 0; color: #d4d4d4;">def calibrate_logical_home(self, T_vr_home):
+    # 1. Get Robot Pose
+    t = lookup_transform('base', 'wrist_3')
+    T_robot = tf_msg_to_matrix(t)
+
+    # 2. Compute Offset
+    T_vr_inv = invert_tf(T_vr_home)
+    self.T_offset = T_robot @ T_vr_inv
+    self.calibrated = True</pre>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 60px;">
+    <h3 style="color: var(--brand); font-size: 18px; margin-bottom: 10px;">(ii) Data Schema & Buffering</h3>
+    <p style="color: var(--muted); font-size: 14px; max-width: 70ch;">
+      The <code>TeleopRecorder</code> node uses a RAM-based ring buffer to capture high-frequency states without disk I/O latency. Data is flushed to a compressed NumPy archive (.npz) only when recording stops.
+    </p>
+    <div style="display: flex; gap: 10px; margin: 15px 0 20px 0; flex-wrap: wrap;">
+      <span class="pill" style="font-family: monospace; font-size: 12px;">timestamp (float64)</span>
+      <span class="pill" style="font-family: monospace; font-size: 12px;">joint_pos (6x float64)</span>
+      <span class="pill" style="font-family: monospace; font-size: 12px;">gripper (bool)</span>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+    
+    <div>
+      <h3 style="color: var(--ok); font-size: 18px; margin-bottom: 10px;">(iii) Vision Gating</h3>
+      <p style="color: var(--muted); font-size: 14px;">
+        To prevent false positives, the <code>ColorDetector</code> node combines HSV masking with a <strong>Depth Gate</strong>. This ensures the robot only reacts to objects on the table (0.75m - 1.1m depth), ignoring background noise.
+      </p>
+    </div>
+
+    <div style="background: #1e1e1e; border-radius: 8px; padding: 15px; font-family: 'Courier New', monospace; font-size: 11px; overflow-x: auto;">
+      
+      <div style="color: #6A9955; margin-bottom: 8px;"># From color_detector.py</div>
+      
+      <pre style="margin: 0; color: #d4d4d4;">
+<span style="color: #6A9955;"># HSV + Depth Gating Logic</span>
+mask = cv2.inRange(hsv, lower, upper)
+depth_val = depth_img[cy, cx] * scale
+
+<span style="color: #C586C0;">if</span> 0.75 < depth_val < 1.1:
+    <span style="color: #DCDCAA;">publish_detection</span>(color)</pre>
+    </div>
+
+  </div>
+
+
+
+  
+
 <div class="panel">
   <h3 style="color: var(--text);">(d) System Operation Workflow</h3>
   <ol style="margin: 10px 0 0; padding-left: 20px; color: var(--muted); line-height: 1.7;">
