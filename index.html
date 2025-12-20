@@ -892,14 +892,10 @@
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
         <div>
           <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">
-            To support Imitation Learning, mere position logging is insufficient. We implement a <strong>RAM-buffered recorder</strong> that captures the full kinematic state vector at 30Hz. Data is serialized into compressed NumPy archives (<code>.npz</code>) to preserve floating-point precision for model training.
+            TODO
           </p>
         </div>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-content: flex-start;">
-           <span class="pill" style="font-size: 11px; background: #eee; color: #555;">t (timestamp)</span>
-           <span class="pill" style="font-size: 11px; background: #eee; color: #555;">q (joint_pos &#x211D;<sup>6</sup>)</span>
-           <span class="pill" style="font-size: 11px; background: #eee; color: #555;">gripper (bool)</span>
-        </div>
+
       </div>
     </div>
 
@@ -912,12 +908,6 @@
           <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">
             We provide the option for the user to replay any trajectory they recorded by passing in the path to the .txt file to a ROS2 node that populates a job queue with the joint positions recorded at each 0.5 second sample and executes trajectories to reach each of those joint positions one by one in a smooth fashion to replay the entire trajectory.
           </p>
-        </div>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-content: flex-start;">
-           <span class="pill" style="font-size: 11px; background: #eee; color: #555;">t (timestamp)</span>
-           <span class="pill" style="font-size: 11px; background: #eee; color: #555;">q (joint_pos &#x211D;<sup>6</sup>)</span>
-           <span class="pill" style="font-size: 11px; background: #eee; color: #555;">gripper (bool)</span>
-        </div>
       </div>
     </div>
 
