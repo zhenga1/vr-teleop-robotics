@@ -867,23 +867,27 @@
     <h3 style="font-size: 18px; margin-bottom: 25px;">Software Architecture</h3>
 
     <div class="panel" style="margin-bottom: 30px;">
-      <h3 style="color: var(--brand); border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
-        Meta Quest 3 TeleOp
-      </h3>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-        <div>
-          <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">
-            The system implements a <strong>72Hz synchronous control loop</strong>. To ensure intuitive handling, we decouple the absolute coordinate systems using a "Logical Home" calibration. This allows the operator to map a comfortable hand position ($\mathbf{P}_{vr}$) to the robot's safety home ($\mathbf{P}_{robot}$) instantly.
-          </p>
-        </div>
-        <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; border-left: 3px solid var(--brand); height: fit-content;">
-          <strong style="font-size: 12px; color: #333;">Control Law:</strong>
-          <p style="font-family: 'Times New Roman', serif; font-size: 15px; margin: 5px 0 0 0;">
-             T<sub>target</sub> = (T<sub>robot_home</sub> &cdot; T<sub>vr_home</sub><sup>-1</sup>) &cdot; T<sub>vr_live</sub>(t)
-          </p>
-        </div>
-      </div>
+  <h3 style="color: var(--brand); border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
+    Meta Quest 3 TeleOp
+  </h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start;">
+    
+    <div>
+      <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">
+        The system implements a <strong>72Hz synchronous control loop</strong>. To ensure intuitive handling, we decouple the absolute coordinate systems using a "Logical Home" calibration. This allows the operator to map a comfortable hand position (P<sub>vr</sub>) to the robot's safety home (P<sub>robot</sub>) instantly.
+      </p>
     </div>
+
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 3px solid var(--brand);">
+      <strong style="font-size: 12px; color: #333; display: block; margin-bottom: 10px;">Control Law:</strong>
+      
+      <img src="./assets/IK quest pic.png" 
+           alt="Equation showing T_target calculation based on calibration offset and live VR pose"
+           style="max-width: 100%; height: auto; display: block;">
+           
+    </div>
+  </div>
+</div>
 
     <div class="panel" style="margin-bottom: 30px;">
       <h3 style="color: var(--accent); border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
