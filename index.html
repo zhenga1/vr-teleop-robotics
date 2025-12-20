@@ -1060,7 +1060,7 @@
           <p>
             Overall, our system successfully met our core design criteria. We demonstrated a complete end-to-end VR-based teleoperation pipeline from the Meta Quest 3 to the UR7e robot arm, including real-time control, trajectory recording, and reliable trajectory replay. This outcome closely aligns with our initial project goals and the scope refined after meeting with our TA.
           </p>
-          
+
           <p>
             In particular, the system achieved stable and intuitive teleoperation, allowing a human operator wearing the Quest 3 headset to control the UR7e’s end-effector motion in real time with low perceptual latency. The mapping between VR controller motion and robot motion was sufficiently smooth to enable precise manipulation behaviors, validating our design choice of using VR as a natural and expressive human–robot interface. Users were able to guide the robot through meaningful manipulation trajectories with minimal training.
           </p>
@@ -1207,22 +1207,60 @@
     </div>
   </section>
 
-  <section>
+  <section id="materials">
     <div style="border-top: 1px solid #e0e0e0; margin-bottom: 60px;"></div>
 
     <div class="wrap" style="margin-bottom: 60px;">
       
       <div class="section-title" style="margin-bottom: 40px;">
-        <h2>Additional Materials</h2>
+        <h2>7. Additional Materials</h2>
+        <p>Documentation & Resources</p>
       </div>
 
-      <div class="pipeline">
-        <div class="flow">
-          <div class="node">
-            <div class="tag">Material 1</div>
-            <div class="title">Slide deck for our presentation</div>
+      <div style="display: flex; flex-direction: column; gap: 30px;">
+        
+        <div class="panel">
+          <h3 style="color: var(--brand);">(a) Final Project Presentation</h3>
+          <p style="margin-bottom: 20px;">
+            Our comprehensive final presentation covering the complete development process, technical challenges, experimental results, and future work:
+          </p>
+          
+          <div style="border-radius: 16px; border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.03); padding: 20px; box-shadow: 0 18px 60px rgba(0,0,0,0.28);">
+            <div style="margin-bottom: 16px;">
+              <strong style="color: var(--text); font-size: 16px;">ME 206A Final Presentation - VR Teleoperation for Robot Learning</strong>
+              <p style="margin: 8px 0; color: var(--muted); font-size: 14px;">
+                Complete technical overview including motivation, design decisions, implementation details, experimental results, and team contributions.
+              </p>
+            </div>
+            
+            <div style="position: relative; width: 100%; height: 600px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
+              <iframe 
+                src="./106_206A final presentation.pdf" 
+                width="100%" 
+                height="100%" 
+                style="border: none; background: white;">
+                <p style="color: var(--muted); text-align: center; padding: 40px;">
+                  Your browser does not support PDF viewing. 
+                  <a href="./106_206A final presentation.pdf" target="_blank" style="color: var(--brand); text-decoration: underline;">
+                    Click here to download the presentation
+                  </a>
+                </p>
+              </iframe>
+            </div>
+            
+            <div style="margin-top: 12px; display: flex; gap: 12px; align-items: center;">
+              <a href="./106_206A final presentation.pdf" 
+                 target="_blank" 
+                 style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--brand); color: white; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
+                <span>📄</span> Download PDF
+              </a>
+              <span style="color: var(--muted); font-size: 13px;">
+                Complete slide deck with technical details and experimental results
+              </span>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   </section>
