@@ -569,17 +569,11 @@
           <span class="pill">vision-conditioned</span>
         </div>
 
-        <h1>Intuitive VR Teleoperation for High-Fidelity Robot Demonstrations</h1>
+        <h1>VR Teleoperation for Robot Data Collection & Demonstrations</h1>
         <p class="sub">
-          We collect real-world manipulation trajectories on a UR7e using Meta Quest 3 controllers,
-          store demonstrations in readable logs, and replay motion with conditional execution based on perception.
+          We collect real-world robot demonstrations/trajectories on a UR7e using Meta Quest 3 controllers,
+          store demonstrations in readable logs, and replay motion with conditional execution based on sensory input.
         </p>
-
-        <div class="hero-actions">
-          <button class="btn primary" data-scroll="#demos">▶ Watch demo</button>
-          <button class="btn" data-scroll="#pipeline">Explore pipeline</button>
-          <button class="btn" data-scroll="#overview">Read overview</button>
-        </div>
 
         <div class="meta">
           <div><b>Platform:</b> UR7e</div>
@@ -593,17 +587,17 @@
         <div class="stat">
           <div class="label">Project goal</div>
           <div class="value">Reliable remote data collection for robot learning</div>
-          <div class="hint">Demonstrations are recorded during teleoperation and replayed for training and evaluation.</div>
+          <div class="hint">Demonstrations/trajectories are recorded during teleoperation and replayed for training and evaluation.</div>
         </div>
         <div class="stat">
           <div class="label">Recording rate</div>
           <div class="value">2 Hz sampling (0.5 s)</div>
-          <div class="hint">Aligned recording and replay for smoother execution (placeholder values—update if changed).</div>
+          <div class="hint">Aligned recording and replay for smoother execution.</div>
         </div>
         <div class="stat">
           <div class="label">Conditional execution</div>
-          <div class="value">Color-based selection → job queue → replay</div>
-          <div class="hint">Vision module selects which trajectory to execute based on sensed scene state.</div>
+          <div class="value">Color-based sorting → replay</div>
+          <div class="hint">Vision module selects which trajectory to execute based on color of objects detected.</div>
         </div>
       </aside>
     </div>
@@ -645,21 +639,21 @@
   <section id="overview">
     <div class="wrap">
       <div class="section-title">
-        <h2>1. Introduction</h2>
+        <h2>Introduction</h2>
         <p>Goal, Motivation & Applications</p>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 24px;">
 
         <div class="panel">
-          <h3 style="color: var(--brand);">(a) Project Goal</h3>
+          <h3 style="color: var(--brand);">Project Goal</h3>
           <p>
-            The goal of this project was to create a low-cost, high-fidelity teleoperation interface/pipeline. We utilize off-the-shelf consumer Virtual Reality hardware (Meta Quest 3) to control a 7-DoF UR7e robotic arm. The system allows a human operator to perform manipulation tasks naturally in 3D space, recording synchronized joint and gripper data to train modern Imitation Learning policies.
+            Modern robot learning policies (including imitation learning and diffusion models) are constrained by a scarcity of diverse, high-quality training data, particularly for 7-DoF manipulation tasks. To address this, we developed a novel, low-cost teleoperation interface that combined Meta Quest 3 Virtual Reality headset with the UR7e robotic arm allowing a human operator to perform manipulation tasks naturally in 3D space through a headset while recording synchronized joint and gripper data to train modern Imitation Learning policies.
           </p>
         </div>
 
         <div class="panel">
-          <h3 style="color: var(--accent);">(b) Motivation & Technical Challenges</h3>
+          <h3 style="color: var(--accent);">Motivation & Technical Challenges</h3>
           <p>
             Modern robot learning (e.g., Diffusion Policies, Open X-Embodiment) is bottlenecked by the lack of high-quality demonstration data. Traditional collection methods such as kinesthetic teaching or "puppet" arms are either dangerous, unintuitive, expensive, or produce noisy and inconsistent results for complex tasks.
           </p>
@@ -669,7 +663,7 @@
         </div>
 
         <div class="panel">
-          <h3 style="color: var(--ok);">(c) Real-World Applications</h3>
+          <h3 style="color: var(--ok);">Real-World Applications</h3>
           <p>
             Beyond collecting training data for AI, this teleoperation architecture has immediate utility in several high-impact domains:
           </p>
@@ -764,13 +758,13 @@
     <div class="wrap">
       
       <div class="section-title" style="margin-bottom: 40px;">
-        <h2>2. Design Strategy</h2>
+        <h2>Design Strategy</h2>
         <p>Criteria, Choices & Trade-offs</p>
       </div>
 
       <div class="grid-3" style="margin-bottom: 60px;">
         <div class="panel">
-          <h3 style="color: var(--brand);">(a) Design Criteria</h3>
+          <h3 style="color: var(--brand);">Design Criteria</h3>
           <p>
             To act as a viable data collection platform, the system had to meet three critical performance benchmarks:
           </p>
@@ -782,7 +776,7 @@
         </div>
 
         <div class="panel" style="grid-column: span 2;">
-          <h3 style="color: var(--accent);">(b/c) Design Choices & Trade-offs</h3>
+          <h3 style="color: var(--accent);">Design Choices & Trade-offs</h3>
           <p>
             We prioritized spatial intuition and operator ergonomics to ensure high-quality data collection. With this in mind we implemented an <strong>Absolute Pose Mapping</strong> strategy rather than Relative Velocity Control. 
           </p>
@@ -803,19 +797,19 @@
         </div>
 
         <div class="panel" style="grid-column: span 3;">
-          <h3 style="color: var(--ok);">(d) Engineering Impact</h3>
+          <h3 style="color: var(--ok);">Engineering Impact</h3>
           <p>
             Our architecture moves beyond academic theory to solve the "Data Bottleneck" in industrial robotics. We prioritized portability and fault-tolerance to create a deployable solution.
           </p>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 12px;">
             <div>
-              <strong style="color: var(--text); font-size: 14px;">1. Scalable Data Pipeline (Quest 3):</strong>
+              <strong style="color: var(--text); font-size: 14px;">Scalable Data Pipeline (Quest 3):</strong>
               <p style="font-size: 13px; margin-top: 4px;">
                 We replaced capital-intensive motion capture labs (e.g., OptiTrack) with consumer inside-out tracking. This drastically reduces the "cost per datum" and allows for decentralized data collection without specialized facility infrastructure.
               </p>
             </div>
             <div>
-              <strong style="color: var(--text); font-size: 14px;">2. Solving the "Long Tail" (Human-in-the-Loop):</strong>
+              <strong style="color: var(--text); font-size: 14px;">Solving the "Long Tail" (Human-in-the-Loop):</strong>
               <p style="font-size: 13px; margin-top: 4px;">
                 Hard-coded automation fails on edge cases. Our teleoperation stack ensures reliability by providing a remote human fallback interface, allowing operators to resolve failures in hazardous or unstructured environments without stopping the line.
               </p>
@@ -826,14 +820,14 @@
 
 
       <div class="section-title">
-  <h2>3. Implementation</h2>
+  <h2>Implementation</h2>
   <p>Hardware, Software & Architecture</p>
 </div>
 
   <div style="margin-bottom: 30px;">
-  <h3 style="font-size: 18px; margin-bottom: 12px;">(a/b) Hardware Signal Flow</h3>
+  <h3 style="font-size: 18px; margin-bottom: 12px;">Hardware Signal Flow</h3>
   <p style="color: var(--muted); max-width: 65ch; margin-bottom: 20px;">
-    The system operates on a distributed ROS 2 network. Control data flows from the operator (Quest 3) through the wireless bridge (ALVR) to the compute node, which solves IK and drives the robot.
+    The system operates on a distributed ROS 2 network. The system employs SteamVR and ALVR for wireless VR tracking and data streaming, which is streamed to our ROS system that uses inverse kinematics to drive the robot.
   </p>
 
 
@@ -882,10 +876,7 @@
 </div>
 
 <div style="margin-bottom: 40px;">
-  <h3 style="font-size: 18px; margin-bottom: 16px;">(c) Software Architecture</h3>
-  <p style="color: var(--muted); margin-bottom: 20px;">
-    The pipeline relies on <strong>ALVR</strong> to spoof the Quest 3 as a standard OpenVR HMD on the Linux host. The <strong>Teleop Node</strong> queries the SteamVR runtime for controller poses and retargets them to the robot frame (T<sub>base</sub>).
-  </p>
+  <h3 style="font-size: 18px; margin-bottom: 16px;">Software Architecture</h3>
 
   <div class="pipeline">
     <div class="flow">
@@ -930,8 +921,7 @@
   </div>
 </div>
 
-
-   <div style="margin-top: 60px;">
+  <div style="margin-top: 60px;">
   
   <div class="section-title" style="margin-bottom: 30px; border-top: 1px solid #eee; padding-top: 40px;">
     <h2>Detailed Technical Implementation</h2>
