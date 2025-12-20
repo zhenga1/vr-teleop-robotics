@@ -519,6 +519,22 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
 
+    /* --- PASTE THIS AT THE END OF YOUR CSS --- */
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      height: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #000;
+      margin-bottom: 12px;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: 0;
+    }
 
   </style>
 </head>
@@ -914,6 +930,7 @@
           </p>
       </div>
     </div>
+    </div>
 
     <div class="panel" style="margin-bottom: 30px;">
       <h3 style="color: var(--ok); border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
@@ -926,6 +943,7 @@
           </p>
         </div>
       </div>
+    </div>
 
       <div style="margin-top: 30px;">
         <figure style="margin: 0; padding: 0; text-align: center;">
@@ -967,7 +985,7 @@
           </div>
         </div> -->
 
-        <div class="demo-stage">
+        <!-- <div class="demo-stage">
           <div class="media small-video">
             <div class="video-container">
               <iframe
@@ -995,7 +1013,29 @@
             </div>
             <div class="caption">Trajectory Replay Demonstration With Sorting</div>
           </div>
+          </div> -->
+
+        <div class="grid-3" style="grid-template-columns: 1fr 1fr;">
+        
+        <div style="display: flex; flex-direction: column;">
+          <div class="video-container">
+            <iframe src="https://drive.google.com/file/d/1a32AXZ5B5SqDEGQX2iF96X-ZKJQWQ4G7/preview" allow="autoplay"></iframe>
           </div>
+          <div style="text-align: center; font-size: 14px; color: var(--muted); margin-top: 8px;">
+            <strong>VR Teleoperation</strong>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <div class="video-container">
+            <iframe src="https://drive.google.com/file/d/1lp2n5Cn-3_QCeh4_zbTvo7GFP2QbZuLO/preview" allow="autoplay"></iframe>
+          </div>
+          <div style="text-align: center; font-size: 14px; color: var(--muted); margin-top: 8px;">
+             <strong>Autonomous Replay</strong>
+          </div>
+        </div>
+
+      </div>
 
 
 
