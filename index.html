@@ -830,25 +830,30 @@
   <p>Hardware, Software & Architecture</p>
 </div>
 
-<div style="margin-bottom: 30px;">
-  <h3 style="font-size: 18px; margin-bottom: 12px;">(a/b) Hardware Setup</h3>
+  <div style="margin-bottom: 30px;">
+  <h3 style="font-size: 18px; margin-bottom: 12px;">(a/b) Hardware Signal Flow</h3>
   <p style="color: var(--muted); max-width: 65ch; margin-bottom: 20px;">
-    The system operates on a distributed ROS 2 network. The <strong>Meta Quest 3</strong> streams tracking data wirelessly via <strong>ALVR</strong> over a 5GHz Wi-Fi connection. The <strong>Linux Workstation</strong> runs the OpenVR runtime (SteamVR) to bridge this data into the ROS ecosystem.
+    The system operates on a distributed ROS 2 network. Control data flows from the operator (Quest 3) through the wireless bridge (ALVR) to the compute node, which solves IK and drives the robot.
   </p>
-  <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+  
+  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
     <span class="pill p">Meta Quest 3</span>
+    <span style="color: var(--muted); font-size: 18px;">→</span>
+    
     <span class="pill">ALVR (Wireless)</span>
-    <span class="pill">SteamVR / OpenVR</span>
-    <span class="pill">Linux Workstation</span>
+    <span style="color: var(--muted); font-size: 18px;">→</span>
+    
+    <span class="pill">SteamVR / Linux</span>
+    <span style="color: var(--muted); font-size: 18px;">→</span>
+    
     <span class="pill b">UR7e Manipulator</span>
-    <span class="pill">Robotiq 2F-85</span>
   </div>
 </div>
 
 <div style="margin-bottom: 40px;">
   <h3 style="font-size: 18px; margin-bottom: 16px;">(c) Software Architecture</h3>
   <p style="color: var(--muted); margin-bottom: 20px;">
-    The pipeline relies on <strong>ALVR</strong> to spoof the Quest 3 as a standard OpenVR HMD on the Linux host. The <strong>Teleop Node</strong> queries the SteamVR runtime for controller poses and retargets them to the robot frame ($T_{base}$).
+    The pipeline relies on <strong>ALVR</strong> to spoof the Quest 3 as a standard OpenVR HMD on the Linux host. The <strong>Teleop Node</strong> queries the SteamVR runtime for controller poses and retargets them to the robot frame (T<sub>base</sub>).
   </p>
 
   <div class="pipeline">
@@ -901,7 +906,7 @@
       <strong>Initialization:</strong> Launch SteamVR and the ALVR Server on the workstation. Open the ALVR Client on the Quest 3 and establish the wireless handshake.
     </li>
     <li>
-      <strong>Calibration:</strong> Position the robot in "Home" state. Hold the VR controller in a comfortable neutral pose and trigger the <strong>Grip</strong> button to calculate the local $T_{offset}$ matrix.
+      <strong>Calibration:</strong> Position the robot in "Home" state. Hold the VR controller in a comfortable neutral pose and trigger the <strong>Grip</strong> button to calculate the local T<sub>offset</sub> matrix.
     </li>
     <li>
       <strong>Data Collection:</strong> Press <strong>Button A</strong> to trigger the <code>/start_recording</code> service. Perform the manipulation task (e.g., stacking).
