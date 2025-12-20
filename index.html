@@ -1187,83 +1187,12 @@ if cv2.inRange(hsv, blue_lo, blue_hi).any():
         <div class="panel" style="grid-column: span 3;">
           <h3 style="color: var(--ok);">Flaws/Future Considerations</h3>
           <p>
-            TODO
+            One flaw in our system is that it doesn't have a safety net to prevent collisions if the human operator makes a mistake while controlling it. For example, if the human operator drops a controller the arm will go down and may crash into the table. To prevent this issue from hapening, we aim to add robot workspace bounding and proximity checks to prevent unsafe motions. Furthermore, instead of a basic color sensing pipeline, we aim to incorporate reinforcement learning to build upon the teleoperated demonstrations collected in this project. Rather than relying on task-specific object placement, learned policies will adapt the demonstrated trajectories to new object poses and environmental variations, improving robustness and generalization.
           </p>
             </div>
           </div>
         </div>
       </div>
-
-  <!-- CHALLENGES / RESULTS -->
-  <section id="results">
-    <div class="wrap">
-      <div class="section-title">
-        <h2>Challenges & Engineering Notes</h2>
-        <p>what broke, what we fixed</p>
-      </div>
-
-      <div class="grid-3">
-        <div class="panel">
-          <h3>Hardware / networking</h3>
-          <p>
-            Getting the Quest headset + controllers reliably connected on the same local network as the lab computer.
-            <!-- <br><br><span style="color:var(--muted2)">Placeholder: add your final network topology + troubleshooting steps.</span> -->
-          </p>
-        </div>
-        <div class="panel">
-          <h3>Software / timing alignment</h3>
-          <p>
-            Smooth trajectory replay requires consistent timing between recorded samples and playback speed.
-            <!-- <br><br><span style="color:var(--muted2)">Placeholder: add your exact interpolation / rate-control strategy.</span> -->
-          </p>
-        </div>
-        <div class="panel">
-          <h3>Reliability / safety</h3>
-          <p>
-            Bounding box constraints, speed limiting, and per-joint control can reduce noise and improve safety.
-            <!-- <br><br><span style="color:var(--muted2)">Placeholder: add safety checks you implemented in ROS nodes.</span> -->
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FUTURE -->
-  <section id="future">
-    <div class="wrap">
-      <div class="section-title">
-        <h2>Future Considerations</h2>
-        <p>next iterations</p>
-      </div>
-
-      <div class="grid-4">
-        <div class="panel">
-          <h3>Controls</h3>
-          <p>
-            PID per joint, velocity limiting, and filtering to reduce noise and improve stability during teleop and replay.
-          </p>
-        </div>
-        <div class="panel">
-          <h3>Safety bounding</h3>
-          <p>
-            Add robot workspace bounding and proximity checks to prevent unsafe motions near lab fixtures and people.
-          </p>
-        </div>
-        <div class="panel">
-          <h3>Dataset packaging</h3>
-          <p>
-            Export trajectories to a consistent schema (e.g., timestamps + joints + gripper + camera metadata) and release a small benchmark set.
-          </p>
-        </div>
-        <div class="panel">
-          <h3>Reinforcement Learning</h3>
-          <p>
-            Incorporate reinforcement learning to build upon the teleoperated demonstrations collected in this project. Rather than relying on task-specific object placement, learned policies will adapt the demonstrated trajectories to new object poses and environmental variations, improving robustness and generalization.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
 
 <section id="team" style="margin-top: 80px; margin-bottom: 80px;">
   
