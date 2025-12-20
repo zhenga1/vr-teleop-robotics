@@ -930,10 +930,6 @@
           <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">
             Another option is for the user to run the trajectory replay continuously with color sensing. First, a ROS node must be run that loads the Intel Realsense D435i camera and publishes the detected color of objects to a ROS2 topic. For color detection, we filter colors using the HSV color spectrum, an adjustable distance (in our demo we used 0.75 meters to 1.1 meters), and adjustable area parameters to control the range of the size of objects that can be detected. Then a second ROS2 node must be run that pulls the information published by the camera, and once a color is detected, runs a full exection involving loading a trajectory .txt file that corresponds with the color of the object detected, populating a job queue with the joint positions recorded at each 0.5 second sample, and executing trajectories to reach each of those joint positions one by one in a smooth fashion to replay the entire trajectory. Once the trajectory has been replayed, the node returns to detecting colors and can replay another trajectory if another color is found.
           </p>
-          <ul style="font-size: 13px; color: var(--muted); padding-left: 20px; margin: 0;">
-            <li><strong>Blue:</strong> HSV[95-130] + Depth[0.75m]</li>
-            <li><strong>Green:</strong> HSV[60-100] + Depth[0.75m]</li>
-          </ul>
         </div>
       </div>
 
@@ -950,86 +946,7 @@
         </figure>
       </div>
     </div>
-  </section>
 
-  <section class="panel" style="margin-bottom: 40px;">
-    <h3 style="color: var(--text); border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
-      (d) System Operation Workflow
-    </h3>
-    <ol style="margin: 0; padding-left: 20px; color: var(--muted); line-height: 1.8; font-size: 14px;">
-      <li style="margin-bottom: 8px;">
-        <strong>Initialization:</strong> Launch SteamVR and the ALVR Server on the workstation. Open the ALVR Client on the Quest 3 to establish the wireless handshake.
-      </li>
-      <li style="margin-bottom: 8px;">
-        <strong>Calibration:</strong> Position the robot in "Home" state. Hold the VR controller in a neutral pose and trigger the <strong>Grip</strong> button to calculate the local T<sub>offset</sub> matrix.
-      </li>
-      <li style="margin-bottom: 8px;">
-        <strong>Data Collection:</strong> Press <strong>Button A</strong> to trigger the <code>/start_recording</code> service. Perform the manipulation task.
-      </li>
-      <li>
-        <strong>Serialization:</strong> Press <strong>Button B</strong> to trigger <code>/stop_recording</code>, which flushes the RAM buffer to a timestamped <code>.npz</code> file.
-      </li>
-    </ol>
-  </section>
-
-  <section style="margin-bottom: 60px;">
-    <div style="border-top: 1px solid #e0e0e0; margin-bottom: 40px;"></div>
-
-    <div class="wrap">
-      <div class="section-title" style="margin-bottom: 40px;">
-        <h2>System Pipeline Recap</h2>
-        <p>End-to-End Data Flow Summary</p>
-      </div>
-
-      <div class="pipeline">
-        <div class="flow">
-          <div class="node">
-            <div class="tag">Planning</div>
-            <div class="title">VR Teleoperation</div>
-            <ul>
-              <li>Meta Quest 3 (Input)</li>
-              <li>Coordinate Mapping</li>
-              <li>Inverse Kinematics</li>
-            </ul>
-          </div>
-          <div class="node">
-            <div class="tag">Collection</div>
-            <div class="title">Record & Store</div>
-            <ul>
-              <li>ROS 2 Services</li>
-              <li>Joint State Sampling</li>
-              <li>.npz Serialization</li>
-            </ul>
-          </div>
-          <div class="node">
-            <div class="tag">Actuation</div>
-            <div class="title">Trajectory Replay</div>
-            <ul>
-              <li>Load Logs</li>
-              <li>Spline Interpolation</li>
-              <li>Execute on UR7e</li>
-            </ul>
-          </div>
-          <div class="node">
-            <div class="tag">Sensing</div>
-            <div class="title">Vision Selection</div>
-            <ul>
-              <li>HSV Color Detect</li>
-              <li>Job Queueing</li>
-              <li>Conditional Replay</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel" style="margin-top: 30px; background: #f8f9fa; border: 1px solid #e0e0e0;">
-        <h3 style="font-size: 14px; text-transform: uppercase; color: #888; margin-bottom: 10px;">Recorder Lifecycle</h3>
-        <p style="font-family: monospace; font-size: 13px; color: #555;">
-          1) Launch Node &rarr; 2) /start_recording &rarr; 3) Teleoperate &rarr; 4) /stop_recording
-        </p>
-      </div>
-    </div>
-  </section>
 
   <section id="demos" style="margin-bottom: 80px;">
     <div class="wrap">
