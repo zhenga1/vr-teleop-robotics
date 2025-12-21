@@ -1059,7 +1059,7 @@ Once triggered, the recording service begins capturing robot command messages pu
 
       <div class="grid-3" style="margin-bottom: 60px;">
         
-        <div class="panel">
+        <div class="panel" style="grid-column: span 2;">
           <h3 style="color: var(--brand);">Results</h3>
           <p>
             Overall, our system successfully met our core design criteria. We demonstrated a complete end-to-end VR-based teleoperation pipeline from the Meta Quest 3 to the UR7e robot arm, including real-time control, trajectory recording, and reliable trajectory replay. This outcome closely aligns with our initial project goals and the scope refined after meeting with our TA.
@@ -1076,7 +1076,7 @@ Once triggered, the recording service begins capturing robot command messages pu
           </p>
         </div>
 
-        <div class="panel" style="grid-column: span 2;">
+        <div class="panel">
           <h3 style="color: var(--accent);">Challenges/Difficulties</h3>
           <ul style="margin: 10px 0 0; padding-left: 20px; font-size: 13px; color: var(--muted); line-height: 1.6;">
               <li><strong>Latency:</strong> Hardware: Getting the Quest headset + controllers reliably connected on the same local network as the lab computer.</li>
@@ -1201,7 +1201,7 @@ Once triggered, the recording service begins capturing robot command messages pu
             <div style="padding-top: 10px; border-top: 1px solid #f0f0f0;">
               <strong style="font-size: 12px; color: #333;">Key Contribution:</strong>
               <span style="font-size: 13px; color: var(--muted);">
-                Solved the problem of Meta Quest 3 connect to UR7e(SteamVR -> ALVR -> OpenVR). Contributed to CV pipeline for obj detection and teleo / record script.
+                Integrated Meta Quest 3 (SteamVR → ALVR → OpenVR) for UR7e teleoperation. Implemented robust color detection for obj tracking, contributed to teleo / record script.
               </span>
             </div>
           </div>
